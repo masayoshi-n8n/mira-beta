@@ -16,14 +16,18 @@ export function AppShell({ children }: AppShellProps) {
   const router = useRouter();
   const isLoggedIn = useStore((s) => s.isLoggedIn);
   const hasHydrated = useStore((s) => s._hasHydrated);
+  const login = useStore((s) => s.login);
+  const completeOnboarding = useStore((s) => s.completeOnboarding);
   const isPublicRoute = pathname === '/' || pathname === '/onboarding';
 
   useEffect(() => {
     if (!hasHydrated) return;
     if (!isLoggedIn && !isPublicRoute) {
-      router.push('/');
+      // Auto-login as the demo user so any URL works without a manual login step
+      login({ name: 'Alex Chen', email: 'alex.chen@linkedin.com', role: 'Product Manager', company: 'LinkedIn' });
+      completeOnboarding();
     }
-  }, [isLoggedIn, isPublicRoute, router, hasHydrated]);
+  }, [isLoggedIn, isPublicRoute, hasHydrated, login, completeOnboarding]);
 
   if (isPublicRoute) {
     return <>{children}</>;
