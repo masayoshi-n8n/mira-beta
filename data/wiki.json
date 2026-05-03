@@ -1,0 +1,58 @@
+[
+  {
+    "id": "wiki-001",
+    "category": "persona",
+    "title": "Power Creator",
+    "body": "Professional content creator with 10,000+ followers on LinkedIn. Posts 5+ times per week across Articles, newsletters, and short-form posts. Primary pain point: zero visibility into what content is performing and why. Monetizes externally via Gumroad, Patreon, or Substack due to lack of native LinkedIn tools. High churn risk — 34% of Power Creators who churned in Q1 cited 'lack of analytics' as primary reason. North star metric for this segment: Weekly Active Creators with 10K+ followers.",
+    "lastUpdated": "2026-04-01T10:00:00Z"
+  },
+  {
+    "id": "wiki-002",
+    "category": "persona",
+    "title": "Casual User",
+    "body": "LinkedIn member who occasionally shares professional updates, posts, and articles. Posts 1–2 times per month. Does not self-identify as a creator. Primary need is professional networking and career visibility, not content creation. Low interest in analytics or monetization features. Low churn risk. Marketing to this segment on creator features is not recommended — messaging should be aspirational and friction-reducing.",
+    "lastUpdated": "2026-04-01T10:00:00Z"
+  },
+  {
+    "id": "wiki-003",
+    "category": "metric",
+    "title": "Weekly Active Creators (WAC)",
+    "body": "Definition: Unique creators who publish at least one piece of content (Article, post, or newsletter) within a 7-day rolling window. Current value: 2.3M. Q3 target: 3.1M. This is the primary leading indicator for creator platform health. A creator who goes 2 weeks without posting is considered at-risk. WAC is flat over the past 2 quarters — analytics features are hypothesized to be the key unlock for re-engaging dormant creators.",
+    "lastUpdated": "2026-04-01T10:00:00Z"
+  },
+  {
+    "id": "wiki-004",
+    "category": "metric",
+    "title": "Post Completion Rate",
+    "body": "Definition: Percentage of posts started (draft created) that are ultimately published. Current: 61%. Goal: 75% by end of Q3. Declining from 67% last quarter. Low completion rate is the clearest signal of scheduling and creation friction. Primary hypothesis: creators start posts but abandon them when they can't schedule for optimal timing or when the creation flow feels high-effort. Post Scheduling v2 is expected to move this metric by 8–12 points.",
+    "lastUpdated": "2026-04-01T10:00:00Z"
+  },
+  {
+    "id": "wiki-005",
+    "category": "metric",
+    "title": "Creator Revenue per User",
+    "body": "Definition: Average monthly revenue earned per monetized creator through LinkedIn's native tools. Current: $0 (no native monetization exists). Substack benchmark: $340/month for active creators. Year 1 target post-monetization launch: $120/month. This metric currently does not exist — it will be created when Newsletter Monetization ships. The $0 baseline is the sharpest gap between LinkedIn and Substack/Beehiiv positioning.",
+    "lastUpdated": "2026-04-01T10:00:00Z"
+  },
+  {
+    "id": "wiki-006",
+    "category": "metric",
+    "title": "Follower Growth Rate",
+    "body": "Definition: Month-over-month percentage increase in followers for a given creator. Tracked per creator and aggregated across segments. Current trend: declining 8% YoY for Power Creators (10K+ followers). Hypothesized driver: content optimization is not possible without analytics, leading creators to post less and grow slower. Expected to improve as analytics visibility improves creator confidence and output frequency.",
+    "lastUpdated": "2026-03-28T10:00:00Z"
+  },
+  {
+    "id": "wiki-007",
+    "category": "principle",
+    "title": "Creator First",
+    "body": "Every feature decision in Creator Tools is evaluated first by its impact on Power Creators. If a feature does not improve life for a creator who posts 5x/week, it is not a priority. This principle was established in the Q1 2026 team offsite and is the lens through which all Q3 decisions should be made.",
+    "lastUpdated": "2026-02-01T10:00:00Z"
+  },
+  {
+    "id": "wiki-008",
+    "category": "strategic_bet",
+    "title": "Q3 2026 Strategic Bets",
+    "body": "LinkedIn Creator Tools has three strategic bets for Q3 2026: (1) Creator Analytics Dashboard — shipped by end of Q3 to stem churn and close the Substack gap. (2) Newsletter Monetization — at least MVP scope to demonstrate a revenue signal. (3) Post Scheduling v2 — ship in Q2 to free up Q3 capacity for higher-priority items. Tension between bets 1 and 2 is the primary prioritization challenge. Mira's recommendation: sequence Analytics first (6-week build), then Monetization (10-week build) in Q4.",
+    "lastUpdated": "2026-04-10T10:00:00Z"
+  }
+]

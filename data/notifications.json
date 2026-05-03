@@ -1,0 +1,44 @@
+[
+  {
+    "id": "notif-001",
+    "type": "conflict_detected",
+    "message": "Conflict detected: Executive priority (Newsletter Monetization Q3) contradicts Q2 planning decision. Review recommended.",
+    "timestamp": "2026-04-09T16:45:00Z",
+    "read": false
+  },
+  {
+    "id": "notif-002",
+    "type": "sync_completed",
+    "message": "Jira sync completed — 23 stories and 6 epic updates ingested from Creator Platform board.",
+    "timestamp": "2026-04-10T06:00:00Z",
+    "read": false
+  },
+  {
+    "id": "notif-003",
+    "type": "extraction_failed",
+    "message": "Extraction failed on 'Creator Fund Legal Review.pdf'. File is password-protected.",
+    "timestamp": "2026-04-08T09:15:00Z",
+    "read": false
+  },
+  {
+    "id": "notif-004",
+    "type": "sync_completed",
+    "message": "Notion sync completed — 'Product Strategy Q2 2026' page ingested. 8 new nodes added.",
+    "timestamp": "2026-04-09T14:20:00Z",
+    "read": true
+  },
+  {
+    "id": "notif-005",
+    "type": "conflict_detected",
+    "message": "Tension flagged: Creator Analytics demand (68 NPS) vs Monetization exec mandate. Mira has a recommendation ready.",
+    "timestamp": "2026-04-07T13:00:00Z",
+    "read": true
+  },
+  {
+    "id": "notif-006",
+    "type": "sync_completed",
+    "message": "Linear sync completed — Creator Tools Roadmap updated with 11 sub-tasks.",
+    "timestamp": "2026-04-06T08:00:00Z",
+    "read": true
+  }
+]

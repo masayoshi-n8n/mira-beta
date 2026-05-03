@@ -1,0 +1,227 @@
+[
+  {
+    "id": "e-001",
+    "source": "fb-001",
+    "target": "ft-001",
+    "type": "influenced",
+    "confidence": 0.93,
+    "inferredSource": "NPS Survey volume and sentiment analysis",
+    "timestamp": "2026-03-15T10:00:00Z"
+  },
+  {
+    "id": "e-002",
+    "source": "fb-002",
+    "target": "ft-001",
+    "type": "caused",
+    "confidence": 0.88,
+    "inferredSource": "Creator interview theme extraction",
+    "timestamp": "2026-02-20T14:30:00Z"
+  },
+  {
+    "id": "e-003",
+    "source": "fb-003",
+    "target": "ft-002",
+    "type": "influenced",
+    "confidence": 0.89,
+    "inferredSource": "NPS survey feature request mapping",
+    "timestamp": "2026-02-01T09:00:00Z"
+  },
+  {
+    "id": "e-004",
+    "source": "fb-004",
+    "target": "ft-001",
+    "type": "relates_to",
+    "confidence": 0.85,
+    "inferredSource": "Support ticket categorization",
+    "timestamp": "2026-03-22T11:15:00Z"
+  },
+  {
+    "id": "e-005",
+    "source": "fb-005",
+    "target": "ft-003",
+    "type": "influenced",
+    "confidence": 0.81,
+    "inferredSource": "Creator interview monetization theme",
+    "timestamp": "2026-01-18T15:00:00Z"
+  },
+  {
+    "id": "e-006",
+    "source": "cp-001",
+    "target": "dc-004",
+    "type": "influenced",
+    "confidence": 0.91,
+    "inferredSource": "Competitive event → prioritization decision linkage",
+    "timestamp": "2026-04-05T09:00:00Z"
+  },
+  {
+    "id": "e-007",
+    "source": "cp-001",
+    "target": "ft-001",
+    "type": "contradicts",
+    "confidence": 0.87,
+    "inferredSource": "Substack analytics launch creates urgency for LinkedIn analytics",
+    "timestamp": "2026-04-05T09:00:00Z"
+  },
+  {
+    "id": "e-008",
+    "source": "nt-001",
+    "target": "dc-002",
+    "type": "caused",
+    "confidence": 0.94,
+    "inferredSource": "CEO revenue mandate directly caused exec priority shift",
+    "timestamp": "2026-03-03T18:00:00Z"
+  },
+  {
+    "id": "e-009",
+    "source": "dc-002",
+    "target": "ft-003",
+    "type": "influenced",
+    "confidence": 0.92,
+    "inferredSource": "Executive priority decision influenced feature prioritization",
+    "timestamp": "2026-03-05T16:00:00Z"
+  },
+  {
+    "id": "e-010",
+    "source": "dc-001",
+    "target": "ft-002",
+    "type": "influenced",
+    "confidence": 0.97,
+    "inferredSource": "Q2 planning decision directly influenced Post Scheduling feature",
+    "timestamp": "2026-01-08T10:00:00Z"
+  },
+  {
+    "id": "e-011",
+    "source": "dc-003",
+    "target": "ep-004",
+    "type": "was_deprioritized_by",
+    "confidence": 0.98,
+    "inferredSource": "Q1 deprioritization decision linked to Creator Fund epic",
+    "timestamp": "2025-12-15T14:00:00Z"
+  },
+  {
+    "id": "e-012",
+    "source": "ep-001",
+    "target": "ft-001",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy",
+    "timestamp": "2026-02-10T09:00:00Z"
+  },
+  {
+    "id": "e-013",
+    "source": "ep-002",
+    "target": "ft-002",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy",
+    "timestamp": "2026-01-15T10:00:00Z"
+  },
+  {
+    "id": "e-014",
+    "source": "ep-003",
+    "target": "ft-003",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy",
+    "timestamp": "2026-03-08T11:00:00Z"
+  },
+  {
+    "id": "e-015",
+    "source": "ep-004",
+    "target": "ft-004",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy",
+    "timestamp": "2025-11-20T09:00:00Z"
+  },
+  {
+    "id": "e-016",
+    "source": "mt-001",
+    "target": "ft-001",
+    "type": "relates_to",
+    "confidence": 0.82,
+    "inferredSource": "Analytics dashboard expected to drive WAC improvement",
+    "timestamp": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "e-017",
+    "source": "mt-003",
+    "target": "ft-003",
+    "type": "relates_to",
+    "confidence": 0.94,
+    "inferredSource": "Creator Revenue metric directly linked to monetization feature",
+    "timestamp": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "e-018",
+    "source": "ps-001",
+    "target": "fb-001",
+    "type": "relates_to",
+    "confidence": 0.88,
+    "inferredSource": "Power creator persona is primary source of analytics NPS feedback",
+    "timestamp": "2026-03-15T10:00:00Z"
+  },
+  {
+    "id": "e-019",
+    "source": "dc-001",
+    "target": "dc-002",
+    "type": "preceded",
+    "confidence": 0.96,
+    "inferredSource": "Q2 planning decision preceded executive priority shift",
+    "timestamp": "2026-01-08T10:00:00Z"
+  },
+  {
+    "id": "e-020",
+    "source": "fb-001",
+    "target": "dc-004",
+    "type": "influenced",
+    "confidence": 0.9,
+    "inferredSource": "NPS feedback spike directly influenced Q3 prioritization analysis",
+    "timestamp": "2026-03-15T10:00:00Z"
+  },
+  {
+    "id": "e-021",
+    "source": "cp-002",
+    "target": "dc-004",
+    "type": "relates_to",
+    "confidence": 0.76,
+    "inferredSource": "Beehiiv competitive activity mentioned in Q3 analysis context",
+    "timestamp": "2026-03-20T09:00:00Z"
+  },
+  {
+    "id": "e-022",
+    "source": "mt-002",
+    "target": "ft-002",
+    "type": "relates_to",
+    "confidence": 0.86,
+    "inferredSource": "Post completion rate expected to improve with scheduling v2",
+    "timestamp": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "e-023",
+    "source": "nt-002",
+    "target": "dc-004",
+    "type": "influenced",
+    "confidence": 0.88,
+    "inferredSource": "Team sync churn data reinforced creator analytics priority",
+    "timestamp": "2026-04-08T15:00:00Z"
+  },
+  {
+    "id": "e-024",
+    "source": "fb-002",
+    "target": "ps-001",
+    "type": "relates_to",
+    "confidence": 0.83,
+    "inferredSource": "Creator interview feedback maps to Power Creator persona",
+    "timestamp": "2026-02-20T14:30:00Z"
+  },
+  {
+    "id": "e-025",
+    "source": "nt-003",
+    "target": "fb-002",
+    "type": "relates_to",
+    "confidence": 0.79,
+    "inferredSource": "Follower growth decline research corroborates creator interview findings",
+    "timestamp": "2026-03-28T10:00:00Z"
+  }
+]

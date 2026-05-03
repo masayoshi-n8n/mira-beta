@@ -1,0 +1,227 @@
+[
+  {
+    "id": "cs-001",
+    "title": "What should we build first in Q3?",
+    "createdAt": "2026-04-10T10:15:00Z",
+    "updatedAt": "2026-04-10T10:18:00Z",
+    "messages": [
+      {
+        "id": "msg-001-01",
+        "role": "user",
+        "content": "What should we build first in Q3 and why?",
+        "timestamp": "2026-04-10T10:15:00Z"
+      },
+      {
+        "id": "msg-001-02",
+        "role": "mira",
+        "content": "Based on everything I've ingested over the past 60 days, my recommendation is **Creator Analytics Dashboard first** in Q3, with Newsletter Monetization sequenced to Q4.\n\nHere's the causal chain that leads me there:\n\n**The demand signal is unusually strong.** 68 NPS requests for analytics in Q1 alone — up 40% in 6 weeks. That's not noise, that's a pattern. When I cross-reference this against your creator interview notes from February, 14 of 14 interviewees surfaced analytics visibility as a pain point. The support ticket cluster (41 tickets in March) confirms the same gap from a different angle.\n\n**The churn risk is acute.** Your team sync on April 8 confirmed it: Power Creators with 50K+ followers are churning at 3x the rate of Q4, and 34% of exit surveys cite 'lack of analytics' as the primary reason. Substack launched creator dashboards in April. That's not a coincidence — they're actively recruiting your best creators.\n\n**The exec mandate for Monetization is real, but sequenceable.** The CEO's Q3 revenue signal requirement (March 3 all-hands) and the VP Revenue mandate are legitimate. But Newsletter Monetization is a 10-week build. Creator Analytics is 6 weeks. You can ship Analytics by mid-Q3 and begin Monetization immediately after — still hitting Q4 with a revenue signal.\n\n**The risk of flipping this is higher.** If you build Monetization first, you spend 10 weeks while Substack continues to poach your analytics-starved Power Creators. By the time you ship Analytics in Q4, the segment you're trying to monetize has already left.\n\nI've mapped the full decision trace below — every signal, decision, and relationship that led to this recommendation.",
+        "timestamp": "2026-04-10T10:15:45Z",
+        "confidence": "high",
+        "provenance": [
+          {
+            "layer": "knowledge-graph",
+            "source": "NPS Survey → Creator Analytics Feature (influenced, 0.93)",
+            "excerpt": "68 NPS requests, 40% volume growth over 6 weeks"
+          },
+          {
+            "layer": "vector-db",
+            "source": "Creator Interview Notes Q1 2026",
+            "excerpt": "14/14 interviews surfaced analytics visibility as primary pain. Quote: 'I'm flying blind. I post and hope.'"
+          },
+          {
+            "layer": "knowledge-graph",
+            "source": "Substack competitor node → Q3 Decision (influenced, 0.91)",
+            "excerpt": "Substack Creator Analytics Dashboard launched April 2026 — direct competitive pressure"
+          },
+          {
+            "layer": "llm-wiki",
+            "source": "Q3 2026 Strategic Bets (wiki)",
+            "excerpt": "Mira's recommendation: sequence Analytics first (6-week build), then Monetization (10-week build) in Q4"
+          }
+        ],
+        "decisionTrace": {
+          "nodes": [
+            {
+              "id": "dt-001",
+              "label": "NPS Demand Spike",
+              "type": "feedback",
+              "timestamp": "2026-03-15T10:00:00Z",
+              "source": "NPS Survey",
+              "confidence": 0.95,
+              "detail": "68 NPS requests for Creator Analytics. Volume up 40% in 6 weeks. Strongest single signal in the dataset."
+            },
+            {
+              "id": "dt-002",
+              "label": "Creator Churn Signal",
+              "type": "metric",
+              "timestamp": "2026-04-08T15:00:00Z",
+              "source": "Team Sync Notes + Exit Surveys",
+              "confidence": 0.91,
+              "detail": "Power Creators churning at 3x rate. 34% cite analytics gap as primary exit reason. Confirmed April 8."
+            },
+            {
+              "id": "dt-003",
+              "label": "Substack Analytics Launch",
+              "type": "competitor",
+              "timestamp": "2026-04-05T09:00:00Z",
+              "source": "Competitive Analysis",
+              "confidence": 0.98,
+              "detail": "Substack launched creator dashboards in April 2026. Directly competes with LinkedIn's gap. $180M ARR, 35M readers."
+            },
+            {
+              "id": "dt-004",
+              "label": "Exec Revenue Mandate",
+              "type": "note",
+              "timestamp": "2026-03-03T18:00:00Z",
+              "source": "CEO All-Hands",
+              "confidence": 0.97,
+              "detail": "CEO: 'Creator Tools needs to show a revenue signal in Q3.' VP Revenue moved Newsletter Monetization from Q4 to Q3."
+            },
+            {
+              "id": "dt-005",
+              "label": "Q3 Priority Decision",
+              "type": "decision",
+              "timestamp": "2026-04-10T10:00:00Z",
+              "source": "Mira Analysis",
+              "confidence": 0.85,
+              "detail": "Analytics Dashboard first (6 weeks), Monetization second (Q4). Reduces churn risk while preserving revenue timeline."
+            },
+            {
+              "id": "dt-006",
+              "label": "Creator Analytics Dashboard",
+              "type": "feature",
+              "timestamp": "2026-02-10T09:00:00Z",
+              "source": "Jira",
+              "confidence": 0.97,
+              "detail": "6-week build. Impressions, engagement rate, follower growth charts, content performance breakdown. Closes Substack parity gap."
+            }
+          ],
+          "edges": [
+            {
+              "id": "dte-001",
+              "source": "dt-001",
+              "target": "dt-005",
+              "label": "influenced"
+            },
+            {
+              "id": "dte-002",
+              "source": "dt-002",
+              "target": "dt-005",
+              "label": "influenced"
+            },
+            {
+              "id": "dte-003",
+              "source": "dt-003",
+              "target": "dt-005",
+              "label": "influenced"
+            },
+            {
+              "id": "dte-004",
+              "source": "dt-004",
+              "target": "dt-005",
+              "label": "influenced"
+            },
+            {
+              "id": "dte-005",
+              "source": "dt-005",
+              "target": "dt-006",
+              "label": "caused"
+            },
+            {
+              "id": "dte-006",
+              "source": "dt-003",
+              "target": "dt-001",
+              "label": "relates_to"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "cs-002",
+    "title": "What do we know about creator analytics demand?",
+    "createdAt": "2026-04-07T14:30:00Z",
+    "updatedAt": "2026-04-07T14:32:00Z",
+    "messages": [
+      {
+        "id": "msg-002-01",
+        "role": "user",
+        "content": "What do we know about creator analytics demand? Give me the full picture.",
+        "timestamp": "2026-04-07T14:30:00Z"
+      },
+      {
+        "id": "msg-002-02",
+        "role": "mira",
+        "content": "Here's everything I've found across your NPS data, interviews, support tickets, and metrics:\n\n**By the numbers:**\n- 68 NPS survey responses in Q1 explicitly requesting a creator analytics dashboard\n- 41 support tickets in March reporting that analytics data isn't visible in the creator UI\n- 14/14 creator interviews surfaced analytics as a top 3 pain point\n- Analytics NPS volume grew 40% over the last 6 weeks — the fastest-growing request in the dataset\n\n**What creators are actually asking for:**\nThe NPS data shows three clusters: (1) impressions and reach by post — 'I can't see who my content is reaching,' (2) time-of-day performance — 'I don't know when to post,' and (3) follower growth tracking — 'I can't see if I'm growing.'\n\n**The context that makes this urgent:**\nSubstack launched creator dashboards in April 2026. In your creator interviews from February, Substack was mentioned in 9 of 14 sessions as a platform creators were 'considering moving to.' That was before the dashboard launch — the pull is likely stronger now.\n\nYour April 8 team sync data adds a critical data point: Power Creators (50K+ followers) are churning at 3x the rate of Q4 2025, and 34% of exit surveys cite analytics as the primary reason.\n\n**What's not yet in the data:**\nI don't have direct A/B test data on analytics feature adoption or conversion lift. If that exists in your analytics warehouse, surfacing it would strengthen the case significantly.",
+        "timestamp": "2026-04-07T14:30:55Z",
+        "confidence": "high",
+        "provenance": [
+          {
+            "layer": "vector-db",
+            "source": "NPS Report Q1 2026",
+            "excerpt": "68 requests for analytics dashboard. Top themes: impressions visibility, time-of-day performance, follower growth tracking."
+          },
+          {
+            "layer": "vector-db",
+            "source": "Creator Interview Notes Q1 2026",
+            "excerpt": "14/14 interviews surfaced analytics. Substack mentioned in 9/14 as alternative. Churn risk: high."
+          },
+          {
+            "layer": "knowledge-graph",
+            "source": "Support Tickets → Analytics Feature (relates_to, 0.85)",
+            "excerpt": "41 support tickets March 2026. Engineering confirmed: data exists in backend, not surfaced in UI."
+          },
+          {
+            "layer": "knowledge-graph",
+            "source": "Creator Churn Metric → Analytics Feature (influenced, 0.91)",
+            "excerpt": "Power Creator churn 3x rate. 34% exit survey: analytics gap primary reason."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cs-003",
+    "title": "What changed in our roadmap in Q1 and why?",
+    "createdAt": "2026-04-05T11:00:00Z",
+    "updatedAt": "2026-04-05T11:02:00Z",
+    "messages": [
+      {
+        "id": "msg-003-01",
+        "role": "user",
+        "content": "What changed in our roadmap in Q1 and why? Walk me through the full sequence.",
+        "timestamp": "2026-04-05T11:00:00Z"
+      },
+      {
+        "id": "msg-003-02",
+        "role": "mira",
+        "content": "Here's the sequence of changes Mira reconstructed from your Jira history, planning notes, and executive signals:\n\n**December 2025: Creator Fund Beta deprioritized**\nCreator Fund Beta was moved from Q1 to H2 2026. The trigger was a legal review that flagged complexity around payment processing classification. Engineering capacity was also a factor — the team was already committed to Post Scheduling v2. Decision made by: Engineering Lead + Legal. No user demand data influenced this — it was a pure capacity and compliance call.\n\n**January 2026: Q2 locked on Post Scheduling v2**\nQ2 planning (January 8) locked Post Scheduling v2 as the primary Q2 bet. Rationale at the time: it was the highest-volume NPS request and the lowest-complexity build. Creator Analytics was considered but deferred — the reasoning was 'let's do the quick win first.' At this point, analytics NPS volume was 41 requests — not yet the spike it became.\n\n**March 2026: Executive priority shift**\nMarch 3 CEO all-hands: 'Creator Tools needs a revenue signal in Q3.' March 5: VP Revenue moved Newsletter Monetization from Q4 to Q3. This was the biggest mid-quarter shift. It created the prioritization tension that still exists today — Q3 now has two competing mandates.\n\n**The tension that wasn't resolved:**\nThe January Q2 planning decision assumed Creator Analytics could wait. But by March, analytics NPS volume had grown 40% and Substack had announced their dashboard launch. The March executive shift didn't account for the emerging analytics urgency. That gap is the core of the Q3 prioritization problem you're now navigating.",
+        "timestamp": "2026-04-05T11:00:55Z",
+        "confidence": "high",
+        "provenance": [
+          {
+            "layer": "knowledge-graph",
+            "source": "Q1 Deprioritization Decision → Creator Fund (was_deprioritized_by, 0.98)",
+            "excerpt": "Creator Fund Beta moved to H2 2026. Reason: legal complexity, eng capacity. December 15, 2025."
+          },
+          {
+            "layer": "knowledge-graph",
+            "source": "Q2 Planning Decision → Post Scheduling (influenced, 0.97)",
+            "excerpt": "January 8 planning: Post Scheduling v2 locked as Q2 primary. Rationale: highest NPS volume at the time, lowest complexity."
+          },
+          {
+            "layer": "knowledge-graph",
+            "source": "Exec Note → Priority Shift (caused, 0.94)",
+            "excerpt": "CEO mandate March 3 → VP Revenue moves Monetization Q4→Q3 on March 5."
+          },
+          {
+            "layer": "vector-db",
+            "source": "Q2 Planning Notes (Jira)",
+            "excerpt": "Decision context: analytics NPS at 41 in January vs 68 by March — the spike came after planning locked."
+          }
+        ]
+      }
+    ]
+  }
+]

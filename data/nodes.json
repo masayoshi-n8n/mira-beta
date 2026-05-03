@@ -1,0 +1,468 @@
+[
+  {
+    "id": "fb-001",
+    "type": "feedback",
+    "label": "Creator Analytics Dashboard — NPS demand spike",
+    "description": "68 NPS survey responses in Q1 explicitly requesting a creator-facing analytics dashboard. Volume increased 40% over 6 weeks. Top request: impressions breakdown by content type and time-of-day performance.",
+    "source": "NPS Survey",
+    "sourceItemId": "kb-001",
+    "timestamp": "2026-03-15T10:00:00Z",
+    "confidence": 0.95,
+    "metadata": {
+      "responseCount": 68,
+      "sentimentScore": 0.82,
+      "npsCategory": "feature_request",
+      "growthRate": "40% over 6 weeks"
+    }
+  },
+  {
+    "id": "fb-002",
+    "type": "feedback",
+    "label": "Creator retention pain — lack of performance visibility",
+    "description": "14 creator interviews surfaced a consistent theme: creators can't see what's working. They churn to Substack and Beehiiv where dashboards exist. Quote: 'I'm flying blind. I post and hope.'",
+    "source": "Interview Notes",
+    "sourceItemId": "kb-002",
+    "timestamp": "2026-02-20T14:30:00Z",
+    "confidence": 0.88,
+    "metadata": {
+      "interviewCount": 14,
+      "churnRisk": "high",
+      "primaryTheme": "analytics_visibility",
+      "competitorMentions": "Substack, Beehiiv"
+    }
+  },
+  {
+    "id": "fb-003",
+    "type": "feedback",
+    "label": "Post scheduling UX — friction in publish workflow",
+    "description": "32 NPS requests asking for scheduled posts and a content calendar view. Current workflow requires manual posting, causing creators to miss optimal publish windows.",
+    "source": "NPS Survey",
+    "sourceItemId": "kb-001",
+    "timestamp": "2026-02-01T09:00:00Z",
+    "confidence": 0.91,
+    "metadata": {
+      "responseCount": 32,
+      "sentimentScore": 0.74,
+      "npsCategory": "feature_request",
+      "painLevel": "medium-high"
+    }
+  },
+  {
+    "id": "fb-004",
+    "type": "feedback",
+    "label": "Support ticket cluster — analytics data not visible",
+    "description": "Support ticket cluster (41 tickets, March) reporting that creators cannot see post performance metrics from the creator dashboard. Engineering confirmed UI gap — data exists in backend but is not surfaced.",
+    "source": "Support Tickets",
+    "sourceItemId": "kb-002",
+    "timestamp": "2026-03-22T11:15:00Z",
+    "confidence": 0.87,
+    "metadata": {
+      "ticketCount": 41,
+      "severity": "medium",
+      "resolution": "pending_feature",
+      "engineeringConfirmed": true
+    }
+  },
+  {
+    "id": "fb-005",
+    "type": "feedback",
+    "label": "Creator monetization interest — interview signal",
+    "description": "9 creator interviews showed high interest in newsletter monetization and paid subscriptions. Creators currently monetizing via external tools (Gumroad, Patreon) due to lack of native options.",
+    "source": "Interview Notes",
+    "sourceItemId": "kb-002",
+    "timestamp": "2026-01-18T15:00:00Z",
+    "confidence": 0.82,
+    "metadata": {
+      "interviewCount": 9,
+      "monetizationInterest": "high",
+      "externalToolsUsed": "Gumroad, Patreon",
+      "willingness_to_pay": true
+    }
+  },
+  {
+    "id": "dc-001",
+    "type": "decision",
+    "label": "Q2 Planning: Prioritize Post Scheduling v2",
+    "description": "Q2 planning session decided to ship Post Scheduling v2 as the primary creator tools investment. Rationale: scheduling was the highest-volume NPS request at the time and lowest engineering complexity.",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2026-01-08T10:00:00Z",
+    "confidence": 0.99,
+    "metadata": {
+      "decisionMakers": "Alex Chen, VP Product, Eng Lead",
+      "quarter": "Q2 2026",
+      "primaryRationale": "highest NPS volume, low complexity",
+      "alternativesConsidered": "Creator Analytics, Creator Fund"
+    }
+  },
+  {
+    "id": "dc-002",
+    "type": "decision",
+    "label": "Executive Priority Shift: Newsletter Monetization to Q3",
+    "description": "VP of Revenue mandated Newsletter Monetization as a Q3 revenue initiative after Substack reported $180M ARR milestone. Monetization moved from Q4 to Q3, creating tension with Creator Analytics.",
+    "source": "Executive Notes",
+    "sourceItemId": "kb-007",
+    "timestamp": "2026-03-05T16:00:00Z",
+    "confidence": 0.95,
+    "metadata": {
+      "decisionMaker": "VP Revenue, CEO",
+      "trigger": "Substack $180M ARR announcement",
+      "impactedEpics": "ep-003, ep-001",
+      "urgency": "high"
+    }
+  },
+  {
+    "id": "dc-003",
+    "type": "decision",
+    "label": "Q1 Deprioritization: Creator Fund Beta pushed to H2",
+    "description": "Creator Fund Beta was deprioritized in Q1 planning due to legal complexity around payment processing and limited engineering capacity. Moved to H2 2026 pending compliance review.",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2025-12-15T14:00:00Z",
+    "confidence": 0.92,
+    "metadata": {
+      "reason": "legal_complexity, eng_capacity",
+      "newTarget": "H2 2026",
+      "blockers": "payment_processing, compliance",
+      "revisitDate": "2026-07-01"
+    }
+  },
+  {
+    "id": "dc-004",
+    "type": "decision",
+    "label": "Q3 Prioritization Analysis: Analytics vs Monetization",
+    "description": "Ongoing strategic tension between Creator Analytics Dashboard (highest user demand, 68 NPS requests, 40% growth) and Newsletter Monetization (executive mandate, revenue signal). Mira's recommendation: Analytics first — user retention risk is acute.",
+    "source": "Product Review",
+    "sourceItemId": "kb-007",
+    "timestamp": "2026-04-10T10:00:00Z",
+    "confidence": 0.85,
+    "metadata": {
+      "optionA": "Creator Analytics Dashboard",
+      "optionB": "Newsletter Monetization",
+      "optionASignals": "68 NPS, 40% growth, 14 interviews, churn risk",
+      "optionBSignals": "VP mandate, Substack revenue signal",
+      "recommendedPath": "Creator Analytics first, Monetization Q4"
+    }
+  },
+  {
+    "id": "ft-001",
+    "type": "feature",
+    "label": "Creator Analytics Dashboard",
+    "description": "Self-serve analytics dashboard for creators showing impressions, reach, engagement rate, follower growth, and content performance breakdowns. Parity with Substack's creator analytics.",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2026-02-10T09:00:00Z",
+    "confidence": 0.97,
+    "metadata": {
+      "status": "planning",
+      "epicId": "ep-001",
+      "estimatedEng": "6 weeks",
+      "designStatus": "in_progress"
+    }
+  },
+  {
+    "id": "ft-002",
+    "type": "feature",
+    "label": "Post Scheduling v2",
+    "description": "Content scheduling with calendar view, optimal time recommendations, and bulk scheduling. Supports LinkedIn Articles, newsletters, and short-form posts.",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2026-01-15T10:00:00Z",
+    "confidence": 0.99,
+    "metadata": {
+      "status": "in_development",
+      "epicId": "ep-002",
+      "estimatedEng": "4 weeks",
+      "launchTarget": "2026-05-30"
+    }
+  },
+  {
+    "id": "ft-003",
+    "type": "feature",
+    "label": "Newsletter Monetization",
+    "description": "Native paid newsletter subscriptions, reader payment processing, creator payout dashboard, and subscription tier management. Direct competition to Substack's core revenue model.",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2026-03-08T11:00:00Z",
+    "confidence": 0.93,
+    "metadata": {
+      "status": "planning",
+      "epicId": "ep-003",
+      "estimatedEng": "10 weeks",
+      "revenueProjection": "$2.4M ARR Year 1"
+    }
+  },
+  {
+    "id": "ft-004",
+    "type": "feature",
+    "label": "Creator Fund Beta",
+    "description": "LinkedIn-sponsored creator fund distributing $5M to qualifying creators based on engagement metrics. Requires payment processing integration and compliance review.",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2025-11-20T09:00:00Z",
+    "confidence": 0.78,
+    "metadata": {
+      "status": "blocked",
+      "epicId": "ep-004",
+      "blockedBy": "legal_compliance",
+      "fundSize": "$5M",
+      "targetCreators": 500
+    }
+  },
+  {
+    "id": "mt-001",
+    "type": "metric",
+    "label": "Weekly Active Creators (WAC)",
+    "description": "Number of unique creators who publish at least one piece of content per week. Current: 2.3M. Target: 3.1M by end of Q3. Leading indicator for creator platform health.",
+    "source": "Internal Metrics",
+    "sourceItemId": "kb-005",
+    "timestamp": "2026-04-01T00:00:00Z",
+    "confidence": 0.99,
+    "metadata": {
+      "currentValue": 2300000,
+      "target": 3100000,
+      "trend": "flat",
+      "period": "weekly",
+      "lastUpdated": "2026-04-01"
+    }
+  },
+  {
+    "id": "mt-002",
+    "type": "metric",
+    "label": "Post Completion Rate",
+    "description": "Percentage of started posts that are published (not abandoned). Current: 61%. Goal: 75%. Low completion rate correlates with scheduling friction and lack of draft management.",
+    "source": "Internal Metrics",
+    "sourceItemId": "kb-005",
+    "timestamp": "2026-04-01T00:00:00Z",
+    "confidence": 0.97,
+    "metadata": {
+      "currentValue": 0.61,
+      "target": 0.75,
+      "trend": "declining",
+      "period": "monthly",
+      "primaryDriver": "scheduling_friction"
+    }
+  },
+  {
+    "id": "mt-003",
+    "type": "metric",
+    "label": "Creator Revenue per User",
+    "description": "Average revenue earned per monetized creator per month. Currently $0 on LinkedIn (no native monetization). Benchmark: Substack creators earn avg $340/month. This is the key gap metric.",
+    "source": "Internal Metrics",
+    "sourceItemId": "kb-005",
+    "timestamp": "2026-04-01T00:00:00Z",
+    "confidence": 0.95,
+    "metadata": {
+      "currentValue": 0,
+      "substackBenchmark": 340,
+      "targetYear1": 120,
+      "trend": "baseline",
+      "period": "monthly"
+    }
+  },
+  {
+    "id": "ps-001",
+    "type": "persona",
+    "label": "Power Creator",
+    "description": "Professional content creator with 10K+ followers. Posts 5+ times/week across articles, posts, and newsletters. Primary pain: no analytics visibility, can't optimize content strategy. High churn risk to Substack.",
+    "source": "User Research",
+    "sourceItemId": "kb-002",
+    "timestamp": "2026-01-10T10:00:00Z",
+    "confidence": 0.96,
+    "metadata": {
+      "followerRange": "10K-500K",
+      "postFrequency": "5+ per week",
+      "primaryPain": "analytics_visibility",
+      "churnRisk": "high",
+      "monetizationInterest": "very_high"
+    }
+  },
+  {
+    "id": "ps-002",
+    "type": "persona",
+    "label": "Casual User",
+    "description": "LinkedIn member who occasionally shares posts and articles. Posts 1-2 times/month. Does not identify as a creator. Primary need: professional networking, not content creation.",
+    "source": "User Research",
+    "sourceItemId": "kb-002",
+    "timestamp": "2026-01-10T10:00:00Z",
+    "confidence": 0.91,
+    "metadata": {
+      "followerRange": "500-5000",
+      "postFrequency": "1-2 per month",
+      "primaryNeed": "networking",
+      "analyticsInterest": "low",
+      "churnRisk": "low"
+    }
+  },
+  {
+    "id": "cp-001",
+    "type": "competitor",
+    "label": "Substack",
+    "description": "Newsletter platform with 35M active readers. Launched creator analytics dashboard in April 2026 — showing impressions, open rates, subscriber growth charts. Creator-first positioning is accelerating LinkedIn creator churn.",
+    "source": "Competitive Analysis",
+    "sourceItemId": "kb-003",
+    "timestamp": "2026-04-05T09:00:00Z",
+    "confidence": 0.98,
+    "metadata": {
+      "activeReaders": 35000000,
+      "keyLaunch": "Creator Analytics Dashboard, April 2026",
+      "ARR": "$180M",
+      "threat_level": "high",
+      "primaryStrength": "creator_monetization"
+    }
+  },
+  {
+    "id": "cp-002",
+    "type": "competitor",
+    "label": "Beehiiv",
+    "description": "Newsletter and creator growth platform. Strong analytics suite — cohort retention, referral tracking, engagement heatmaps. Growing 20% MoM. Targeting LinkedIn's power creators with migration tools.",
+    "source": "Competitive Analysis",
+    "sourceItemId": "kb-003",
+    "timestamp": "2026-03-20T09:00:00Z",
+    "confidence": 0.89,
+    "metadata": {
+      "growthRate": "20% MoM",
+      "keyStrength": "analytics_suite",
+      "targetSegment": "power_creators",
+      "threat_level": "medium-high",
+      "migrationTool": true
+    }
+  },
+  {
+    "id": "cp-003",
+    "type": "competitor",
+    "label": "TikTok Creator Tools",
+    "description": "TikTok Creator Studio offers real-time analytics, revenue dashboard, and Creator Fund. Strong in video content. Less relevant for LinkedIn's professional audience but relevant for creator monetization benchmarking.",
+    "source": "Competitive Analysis",
+    "sourceItemId": "kb-003",
+    "timestamp": "2026-03-20T09:00:00Z",
+    "confidence": 0.75,
+    "metadata": {
+      "relevance": "medium",
+      "keyStrength": "creator_fund_model",
+      "primaryFormat": "video",
+      "audienceOverlap": "low",
+      "threat_level": "low"
+    }
+  },
+  {
+    "id": "ep-001",
+    "type": "epic",
+    "label": "Epic: Creator Analytics Dashboard",
+    "description": "Q3 epic to ship a creator-facing analytics dashboard. Scope: impressions, reach, engagement rate, follower growth charts, content performance breakdown by type, and export capabilities.",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2026-02-10T09:00:00Z",
+    "confidence": 0.99,
+    "metadata": {
+      "jiraKey": "CREATOR-128",
+      "status": "planning",
+      "sprint": "Q3 2026",
+      "storyPoints": 87,
+      "assignedTeam": "Creator Platform"
+    }
+  },
+  {
+    "id": "ep-002",
+    "type": "epic",
+    "label": "Epic: Post Scheduling v2",
+    "description": "Q2 epic shipping now. Calendar view, optimal time recommendations (ML-powered), bulk scheduling, and draft management. Target GA: May 30, 2026.",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2026-01-15T10:00:00Z",
+    "confidence": 0.99,
+    "metadata": {
+      "jiraKey": "CREATOR-89",
+      "status": "in_development",
+      "sprint": "Q2 2026",
+      "storyPoints": 52,
+      "assignedTeam": "Creator Platform",
+      "completionPct": 68
+    }
+  },
+  {
+    "id": "ep-003",
+    "type": "epic",
+    "label": "Epic: Newsletter Monetization",
+    "description": "Q3/Q4 epic for native newsletter paid subscriptions. Includes payment processing, creator payout dashboard, subscriber management, and pricing tiers. Competing priority with Creator Analytics.",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2026-03-08T11:00:00Z",
+    "confidence": 0.93,
+    "metadata": {
+      "jiraKey": "CREATOR-142",
+      "status": "planning",
+      "sprint": "Q3 2026",
+      "storyPoints": 134,
+      "assignedTeam": "Creator Platform + Payments"
+    }
+  },
+  {
+    "id": "ep-004",
+    "type": "epic",
+    "label": "Epic: Creator Fund Beta",
+    "description": "H2 2026 epic (deprioritized from Q1). LinkedIn-funded creator rewards program. Currently blocked on legal review of payment processing classification.",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2025-11-20T09:00:00Z",
+    "confidence": 0.78,
+    "metadata": {
+      "jiraKey": "CREATOR-67",
+      "status": "blocked",
+      "sprint": "H2 2026",
+      "storyPoints": 98,
+      "blockedBy": "legal_review",
+      "blockedSince": "2025-12-15"
+    }
+  },
+  {
+    "id": "nt-001",
+    "type": "note",
+    "label": "Exec note: Q3 must show revenue signal",
+    "description": "CEO note from all-hands (March 3): 'Creator Tools needs to show a revenue signal in Q3 or we risk budget cuts in the next planning cycle. Monetization is not optional.' Directly influences Q3 prioritization.",
+    "source": "Executive Notes",
+    "sourceItemId": "kb-007",
+    "timestamp": "2026-03-03T18:00:00Z",
+    "confidence": 0.97,
+    "metadata": {
+      "author": "CEO",
+      "context": "All-hands March 2026",
+      "urgency": "critical",
+      "implication": "monetization_must_ship_Q3"
+    }
+  },
+  {
+    "id": "nt-002",
+    "type": "note",
+    "label": "Creator team sync: Analytics churn signal confirmed",
+    "description": "April 8 creator team weekly sync. Growth team confirmed: creators with 50K+ followers showing 3x higher churn in Q1 vs Q4. Exit survey data: 34% cited 'lack of analytics' as primary reason. Alex flagged for Q3 planning.",
+    "source": "Meeting Notes",
+    "sourceItemId": "kb-008",
+    "timestamp": "2026-04-08T15:00:00Z",
+    "confidence": 0.91,
+    "metadata": {
+      "meetingDate": "2026-04-08",
+      "attendees": "Alex Chen, Growth Lead, Data PM",
+      "churnMultiple": 3,
+      "primaryExitReason": "lack_of_analytics",
+      "percentage": 34
+    }
+  },
+  {
+    "id": "nt-003",
+    "type": "note",
+    "label": "Research: Follower Growth Rate declining for power creators",
+    "description": "Internal data team analysis: Follower Growth Rate for creators with 10K+ followers declined 8% YoY. Correlated with Substack and Beehiiv launch activity. Analytics visibility may be key retention lever.",
+    "source": "Internal Metrics",
+    "sourceItemId": "kb-005",
+    "timestamp": "2026-03-28T10:00:00Z",
+    "confidence": 0.84,
+    "metadata": {
+      "metric": "Follower Growth Rate",
+      "segment": "10K+ followers",
+      "change": "-8% YoY",
+      "hypothesis": "analytics_gap_driving_churn",
+      "confidence_in_correlation": 0.72
+    }
+  }
+]

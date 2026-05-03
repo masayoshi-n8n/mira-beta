@@ -1,0 +1,12 @@
+[
+  {
+    "id": "proj-001",
+    "name": "Q3 Prioritization Brief",
+    "description": "Build a structured prioritization brief for Q3 — Analytics vs Monetization decision.",
+    "createdAt": "2026-04-09T10:00:00Z",
+    "updatedAt": "2026-04-10T10:18:00Z",
+    "status": "active",
+    "chatSessionIds": ["cs-001"],
+    "deliverableIds": ["del-001"]
+  }
+]

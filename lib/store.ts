@@ -1,0 +1,69 @@
+'use client';
+
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+interface User {
+  name: string;
+  email: string;
+  role?: string;
+  company?: string;
+  avatarUrl?: string;
+}
+
+interface AppState {
+  isLoggedIn: boolean;
+  hasCompletedOnboarding: boolean;
+  user: User | null;
+  selectedNodeId: string | null;
+  isUploadModalOpen: boolean;
+  notificationCount: number;
+  currentChatSessionId: string | null;
+  preloadedPrompt: string | null;
+
+  login: (user: User) => void;
+  logout: () => void;
+  completeOnboarding: () => void;
+  setSelectedNode: (id: string | null) => void;
+  setUploadModalOpen: (open: boolean) => void;
+  setCurrentChatSession: (id: string | null) => void;
+  setPreloadedPrompt: (prompt: string | null) => void;
+  decrementNotifications: () => void;
+  resetNotifications: () => void;
+}
+
+export const useStore = create<AppState>()(
+  persist(
+    (set) => ({
+      isLoggedIn: false,
+      hasCompletedOnboarding: false,
+      user: null,
+      selectedNodeId: null,
+      isUploadModalOpen: false,
+      notificationCount: 3,
+      currentChatSessionId: null,
+      preloadedPrompt: null,
+
+      login: (user) => set({ isLoggedIn: true, user }),
+      logout: () =>
+        set({ isLoggedIn: false, user: null, hasCompletedOnboarding: false }),
+      completeOnboarding: () => set({ hasCompletedOnboarding: true }),
+      setSelectedNode: (id) => set({ selectedNodeId: id }),
+      setUploadModalOpen: (open) => set({ isUploadModalOpen: open }),
+      setCurrentChatSession: (id) => set({ currentChatSessionId: id }),
+      setPreloadedPrompt: (prompt) => set({ preloadedPrompt: prompt }),
+      decrementNotifications: () =>
+        set((s) => ({ notificationCount: Math.max(0, s.notificationCount - 1) })),
+      resetNotifications: () => set({ notificationCount: 0 }),
+    }),
+    {
+      name: 'mira-app-state',
+      partialize: (state) => ({
+        isLoggedIn: state.isLoggedIn,
+        hasCompletedOnboarding: state.hasCompletedOnboarding,
+        user: state.user,
+        notificationCount: state.notificationCount,
+      }),
+    }
+  )
+);

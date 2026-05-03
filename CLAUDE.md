@@ -396,16 +396,16 @@ Build one epic at a time. Complete all stories in an epic before starting the ne
 
 | # | Epic | Key stories | Status |
 |---|---|---|---|
-| EP-01 | Account Registration & Onboarding | Email signup UI, Google OAuth UI (simulated), 3-step onboarding overlay, first context prompt modal, skip option, first node confirmation screen | **TODO** |
-| EP-02 | Home / Dashboard | LPM stats summary, live activity feed, 2–3 proactive Mira suggestions with pre-loaded prompts, recent chat sessions with one-click resume, empty state | **TODO** |
-| EP-03 | Mira Chat | Natural language Q&A interface, decision trace ReactFlow diagram inside chat (this is the signature feature), provenance bar on every response, confidence indicator, in-chat upload, chat history, generate deliverable | **TODO** |
-| EP-04 | Global LPM / Product Map | Full interactive React Flow graph, node color coding + legend, real-time node propagation simulation, node side panel (properties/source/confidence/edges), source provenance link, NL graph query + highlight, edge detail, zoom/pan/filter controls | **TODO** |
-| EP-05 | Knowledge Base | Searchable/filterable source list, processing status per item, item detail preview (extracted entities + graph connections), manual annotation, delete with retain/remove choice | **TODO** |
-| EP-06 | Global Upload Affordance | Persistent upload button in global header, upload modal with drag-and-drop, bulk upload (max 10 files, 25MB each), free-text note, upload trigger from product map empty state | **TODO** |
-| EP-07 | Projects | Create project (free-form name), empty project state, scoped Mira chat, Mira generates deliverables, save + download deliverables, projects list, archive/delete | **TODO** |
-| EP-08 | Integrations | Connect Jira/Notion/Linear UI (simulated OAuth), integration status page, disconnect with retain/remove choice, background sync simulation | **TODO** |
-| EP-09 | Settings & Notifications | Profile edit (name, email, avatar), password change, notification bell with badge count, notification dropdown (last 20 items) | **TODO** |
-| EP-10 | LPM Extraction & Enrichment | Simulated extraction pipeline on upload (show progress states), confidence scoring display, conflict detection UI, project attribution tagging, background enrichment simulation, proactive suggestion generation | **TODO** |
+| EP-01 | Account Registration & Onboarding | Email signup UI, Google OAuth UI (simulated), 3-step onboarding overlay, first context prompt modal, skip option, first node confirmation screen | **DONE** |
+| EP-02 | Home / Dashboard | LPM stats summary, live activity feed, 2–3 proactive Mira suggestions with pre-loaded prompts, recent chat sessions with one-click resume, empty state | **DONE** |
+| EP-03 | Mira Chat | Natural language Q&A interface, decision trace ReactFlow diagram inside chat (this is the signature feature), provenance bar on every response, confidence indicator, in-chat upload, chat history, generate deliverable | **DONE** |
+| EP-04 | Global LPM / Product Map | Full interactive React Flow graph, node color coding + legend, real-time node propagation simulation, node side panel (properties/source/confidence/edges), source provenance link, NL graph query + highlight, edge detail, zoom/pan/filter controls | **DONE** |
+| EP-05 | Knowledge Base | Searchable/filterable source list, processing status per item, item detail preview (extracted entities + graph connections), manual annotation, delete with retain/remove choice | **DONE** |
+| EP-06 | Global Upload Affordance | Persistent upload button in global header, upload modal with drag-and-drop, bulk upload (max 10 files, 25MB each), free-text note, upload trigger from product map empty state | **DONE** |
+| EP-07 | Projects | Create project (free-form name), empty project state, scoped Mira chat, Mira generates deliverables, save + download deliverables, projects list, archive/delete | **DONE** |
+| EP-08 | Integrations | Connect Jira/Notion/Linear UI (simulated OAuth), integration status page, disconnect with retain/remove choice, background sync simulation | **DONE** |
+| EP-09 | Settings & Notifications | Profile edit (name, email, avatar), password change, notification bell with badge count, notification dropdown (last 20 items) | **DONE** |
+| EP-10 | LPM Extraction & Enrichment | Simulated extraction pipeline on upload (show progress states), confidence scoring display, conflict detection UI, project attribution tagging, background enrichment simulation, proactive suggestion generation | **DONE** |
 
 ---
 

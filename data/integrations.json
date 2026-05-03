@@ -1,0 +1,23 @@
+[
+  {
+    "id": "int-001",
+    "name": "jira",
+    "status": "connected",
+    "lastSyncedAt": "2026-04-10T06:00:00Z",
+    "nodeCount": 42
+  },
+  {
+    "id": "int-002",
+    "name": "notion",
+    "status": "connected",
+    "lastSyncedAt": "2026-04-09T14:20:00Z",
+    "nodeCount": 18
+  },
+  {
+    "id": "int-003",
+    "name": "linear",
+    "status": "connected",
+    "lastSyncedAt": "2026-04-06T08:00:00Z",
+    "nodeCount": 11
+  }
+]

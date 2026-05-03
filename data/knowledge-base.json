@@ -1,0 +1,102 @@
+[
+  {
+    "id": "kb-001",
+    "title": "NPS Report Q1 2026 — Creator Tools",
+    "source": "upload",
+    "status": "ready",
+    "uploadedAt": "2026-03-27T10:00:00Z",
+    "extractedNodeIds": ["fb-001", "fb-003"],
+    "annotations": [
+      "68 requests for analytics dashboard",
+      "32 requests for scheduling improvements",
+      "Key quote: 'I have no idea what content is resonating'"
+    ]
+  },
+  {
+    "id": "kb-002",
+    "title": "Creator Interview Notes — Q1 2026 (14 sessions)",
+    "source": "upload",
+    "status": "ready",
+    "uploadedAt": "2026-02-22T14:00:00Z",
+    "extractedNodeIds": ["fb-002", "fb-005", "ps-001", "ps-002"],
+    "annotations": [
+      "Churn risk: high for 50K+ followers segment",
+      "Substack and Beehiiv mentioned in 9/14 interviews",
+      "Monetization interest strongest in newsletter creators"
+    ]
+  },
+  {
+    "id": "kb-003",
+    "title": "Competitive Analysis — Creator Platforms Q1 2026",
+    "source": "upload",
+    "status": "ready",
+    "uploadedAt": "2026-03-21T09:30:00Z",
+    "extractedNodeIds": ["cp-001", "cp-002", "cp-003"],
+    "annotations": [
+      "Substack Analytics launch confirmed for April 2026",
+      "Beehiiv growing 20% MoM with strong analytics positioning",
+      "TikTok Creator Fund model: relevant benchmark for Creator Fund"
+    ]
+  },
+  {
+    "id": "kb-004",
+    "title": "Jira — Creator Platform Board",
+    "source": "jira",
+    "status": "ready",
+    "uploadedAt": "2026-04-10T06:00:00Z",
+    "extractedNodeIds": ["ep-001", "ep-002", "ep-003", "ep-004", "ft-001", "ft-002", "ft-003", "ft-004", "dc-001", "dc-003"],
+    "annotations": [
+      "4 active epics tracked",
+      "Creator Fund blocked since Dec 2025",
+      "Post Scheduling v2 at 68% completion"
+    ]
+  },
+  {
+    "id": "kb-005",
+    "title": "Internal Metrics — Creator Platform Q1 2026",
+    "source": "notion",
+    "status": "ready",
+    "uploadedAt": "2026-04-01T09:00:00Z",
+    "extractedNodeIds": ["mt-001", "mt-002", "mt-003", "nt-003"],
+    "annotations": [
+      "WAC currently 2.3M, target 3.1M",
+      "Post Completion Rate declining: 61% vs 67% last quarter",
+      "Creator Revenue: $0 native (benchmark gap vs Substack)"
+    ]
+  },
+  {
+    "id": "kb-006",
+    "title": "Linear — Creator Tools Roadmap",
+    "source": "linear",
+    "status": "ready",
+    "uploadedAt": "2026-04-06T08:00:00Z",
+    "extractedNodeIds": ["ep-001", "ep-002"],
+    "annotations": [
+      "11 sub-tasks under Creator Analytics epic",
+      "Post Scheduling v2 on track for May 30"
+    ]
+  },
+  {
+    "id": "kb-007",
+    "title": "Executive Notes — Q3 Strategy (March 2026)",
+    "source": "note",
+    "status": "ready",
+    "uploadedAt": "2026-03-06T10:00:00Z",
+    "extractedNodeIds": ["dc-002", "dc-004", "nt-001"],
+    "annotations": [
+      "CEO mandate: revenue signal needed in Q3",
+      "VP Revenue: Newsletter Monetization moved from Q4 to Q3",
+      "Alex flagged tension with Creator Analytics demand"
+    ]
+  },
+  {
+    "id": "kb-008",
+    "title": "Creator Fund Legal Review.pdf",
+    "source": "upload",
+    "status": "failed",
+    "uploadedAt": "2026-04-08T09:10:00Z",
+    "extractedNodeIds": [],
+    "annotations": [],
+    "errorMessage": "File appears to be password-protected. Re-upload without password protection."
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "sg-001",
+    "summary": "Creator analytics feedback spiked 40% in the last 6 weeks — want me to build a prioritization brief?",
+    "preloadedPrompt": "Build me a prioritization brief for Creator Analytics Dashboard. Include the NPS signal data, competitive context from Substack, and a recommendation on whether we should move this to Q3.",
+    "relatedNodeIds": ["fb-001", "fb-004", "cp-001", "dc-004", "ep-001"],
+    "timestamp": "2026-04-10T09:00:00Z"
+  },
+  {
+    "id": "sg-002",
+    "summary": "Substack launched creator dashboards last week — want me to run a competitive impact analysis?",
+    "preloadedPrompt": "Analyze the competitive impact of Substack's creator analytics dashboard launch in April 2026. How does this affect our Q3 prioritization? What's the churn risk if we don't ship Creator Analytics in Q3?",
+    "relatedNodeIds": ["cp-001", "cp-002", "fb-002", "dc-004", "nt-003"],
+    "timestamp": "2026-04-08T14:00:00Z"
+  },
+  {
+    "id": "sg-003",
+    "summary": "3 open Jira tickets in Creator Fund Beta are flagged — want a status summary?",
+    "preloadedPrompt": "Give me a status summary of the Creator Fund Beta epic. What's blocking it, when was it deprioritized, and what would need to be true to unblock it?",
+    "relatedNodeIds": ["ep-004", "ft-004", "dc-003"],
+    "timestamp": "2026-04-09T10:00:00Z"
+  }
+]
