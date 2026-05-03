@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { SigmaContainer, useRegisterEvents, useSetSettings, useSigma } from '@react-sigma/core';
+import { useEffect, useRef } from 'react';
 import type { SigmaGraphType, SigmaNodeAttributes, SigmaEdgeAttributes } from '@/lib/sigma-utils';
 import type { NodeType } from '@/lib/types';
 
@@ -15,105 +14,8 @@ export interface SigmaGraphProps {
   onStageClick: () => void;
 }
 
-interface GraphEventsProps {
-  selectedId: string | null;
-  searchQuery: string;
-  activeFilters: NodeType[];
-  externalHighlightIds?: string[] | null;
-  onNodeClick: (id: string) => void;
-  onStageClick: () => void;
-}
-
-function GraphEvents({
-  selectedId,
-  searchQuery,
-  activeFilters,
-  externalHighlightIds,
-  onNodeClick,
-  onStageClick,
-}: GraphEventsProps) {
-  const sigma = useSigma<SigmaNodeAttributes, SigmaEdgeAttributes>();
-  const registerEvents = useRegisterEvents<SigmaNodeAttributes, SigmaEdgeAttributes>();
-  const setSettings = useSetSettings<SigmaNodeAttributes, SigmaEdgeAttributes>();
-  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
-
-  useEffect(() => {
-    registerEvents({
-      clickNode: ({ node }) => onNodeClick(node),
-      clickStage: () => onStageClick(),
-      enterNode: ({ node }) => setHoveredNode(node),
-      leaveNode: () => setHoveredNode(null),
-    });
-  }, [registerEvents, onNodeClick, onStageClick]);
-
-  useEffect(() => {
-    const graph = sigma.getGraph();
-    const hasSearch = searchQuery.length > 0;
-    const hasFilter = activeFilters.length > 0;
-    const hasExternal = externalHighlightIds != null;
-
-    setSettings({
-      nodeReducer: (node, data) => {
-        const labelLower = data.label.toLowerCase();
-        const descLower = (data.description ?? '').toLowerCase();
-        const query = searchQuery.toLowerCase();
-        const nodeType = data.nodeType as NodeType;
-
-        const matchesSearch = !hasSearch || labelLower.includes(query) || descLower.includes(query);
-        const matchesFilter = !hasFilter || activeFilters.includes(nodeType);
-        const matchesExternal = !hasExternal || (externalHighlightIds?.includes(node) ?? false);
-
-        const isSelected = node === selectedId;
-        const isHovered = node === hoveredNode;
-        const isNeighbor =
-          hoveredNode !== null &&
-          graph.hasNode(hoveredNode) &&
-          graph.areNeighbors(hoveredNode, node);
-        const isActive = hoveredNode !== null ? isHovered || isNeighbor : true;
-
-        const shouldFade =
-          !matchesSearch ||
-          !matchesFilter ||
-          !matchesExternal ||
-          (hoveredNode !== null && !isActive);
-
-        return {
-          ...data,
-          highlighted: isSelected || isHovered,
-          size: isSelected ? data.size * 1.5 : isHovered ? data.size * 1.2 : data.size,
-          color: shouldFade ? '#e2e8f0' : data.color,
-          zIndex: isSelected ? 2 : isHovered ? 1 : 0,
-          label: shouldFade ? '' : data.label,
-        };
-      },
-
-      edgeReducer: (edge, data) => {
-        const graph = sigma.getGraph();
-        const src = graph.source(edge);
-        const tgt = graph.target(edge);
-
-        if (hoveredNode) {
-          const connected = src === hoveredNode || tgt === hoveredNode;
-          if (!connected) return { ...data, hidden: true };
-          return { ...data, color: '#6366f1', size: 2 };
-        }
-
-        if (selectedId) {
-          const connected = src === selectedId || tgt === selectedId;
-          return {
-            ...data,
-            color: connected ? '#6366f1' : '#e2e8f040',
-            size: connected ? 2 : 0.5,
-          };
-        }
-
-        return data;
-      },
-    });
-  }, [sigma, setSettings, hoveredNode, selectedId, searchQuery, activeFilters, externalHighlightIds]);
-
-  return null;
-}
+// Lazy type — sigma is only ever imported inside useEffect (browser only)
+type SigmaInstance = import('sigma').Sigma<SigmaNodeAttributes, SigmaEdgeAttributes>;
 
 export function SigmaGraph({
   graph,
@@ -124,11 +26,36 @@ export function SigmaGraph({
   onNodeClick,
   onStageClick,
 }: SigmaGraphProps) {
-  return (
-    <SigmaContainer<SigmaNodeAttributes, SigmaEdgeAttributes>
-      graph={graph}
-      style={{ width: '100%', height: '100%', background: '#f8fafc' }}
-      settings={{
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sigmaRef = useRef<SigmaInstance | null>(null);
+
+  // Mutable refs — reducer closures read from these without re-initializing sigma
+  const selectedIdRef = useRef(selectedId);
+  const searchQueryRef = useRef(searchQuery);
+  const activeFiltersRef = useRef(activeFilters);
+  const externalRef = useRef(externalHighlightIds);
+  const hoveredRef = useRef<string | null>(null);
+  const onNodeClickRef = useRef(onNodeClick);
+  const onStageClickRef = useRef(onStageClick);
+
+  // Sync refs and trigger a sigma refresh whenever props change
+  useEffect(() => { selectedIdRef.current = selectedId; sigmaRef.current?.refresh(); }, [selectedId]);
+  useEffect(() => { searchQueryRef.current = searchQuery; sigmaRef.current?.refresh(); }, [searchQuery]);
+  useEffect(() => { activeFiltersRef.current = activeFilters; sigmaRef.current?.refresh(); }, [activeFilters]);
+  useEffect(() => { externalRef.current = externalHighlightIds; sigmaRef.current?.refresh(); }, [externalHighlightIds]);
+  useEffect(() => { onNodeClickRef.current = onNodeClick; }, [onNodeClick]);
+  useEffect(() => { onStageClickRef.current = onStageClick; }, [onStageClick]);
+
+  // Initialize sigma — dynamic import ensures sigma (WebGL) never runs on the server
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const container = containerRef.current;
+    let killed = false;
+
+    import('sigma').then(({ Sigma }) => {
+      if (killed || !container) return;
+
+      const sigma = new Sigma<SigmaNodeAttributes, SigmaEdgeAttributes>(graph, container, {
         renderEdgeLabels: false,
         defaultEdgeType: 'arrow',
         labelSize: 12,
@@ -137,16 +64,99 @@ export function SigmaGraph({
         zIndex: true,
         minCameraRatio: 0.15,
         maxCameraRatio: 4,
-      }}
-    >
-      <GraphEvents
-        selectedId={selectedId}
-        searchQuery={searchQuery}
-        activeFilters={activeFilters}
-        externalHighlightIds={externalHighlightIds}
-        onNodeClick={onNodeClick}
-        onStageClick={onStageClick}
-      />
-    </SigmaContainer>
+      });
+
+      sigma.setSetting('nodeReducer', (node, data) => {
+        const g = sigma.getGraph();
+        const query = searchQueryRef.current.toLowerCase();
+        const hasSearch = query.length > 0;
+        const hasFilter = activeFiltersRef.current.length > 0;
+        const hasExternal = externalRef.current != null;
+        const nodeType = data.nodeType as NodeType;
+
+        const matchesSearch =
+          !hasSearch ||
+          (data.label ?? '').toLowerCase().includes(query) ||
+          (data.description ?? '').toLowerCase().includes(query);
+        const matchesFilter = !hasFilter || activeFiltersRef.current.includes(nodeType);
+        const matchesExternal =
+          !hasExternal || (externalRef.current?.includes(node) ?? false);
+
+        const hovered = hoveredRef.current;
+        const isSelected = node === selectedIdRef.current;
+        const isHovered = node === hovered;
+        const isNeighbor =
+          hovered !== null && g.hasNode(hovered) && g.areNeighbors(hovered, node);
+        const isActive = hovered !== null ? isHovered || isNeighbor : true;
+
+        const shouldFade =
+          !matchesSearch ||
+          !matchesFilter ||
+          !matchesExternal ||
+          (hovered !== null && !isActive);
+
+        const baseSize = data.size ?? 10;
+
+        return {
+          ...data,
+          highlighted: isSelected || isHovered,
+          size: isSelected ? baseSize * 1.5 : isHovered ? baseSize * 1.2 : baseSize,
+          color: shouldFade ? '#e2e8f0' : data.color,
+          zIndex: isSelected ? 2 : isHovered ? 1 : 0,
+          label: shouldFade ? '' : data.label,
+        };
+      });
+
+      sigma.setSetting('edgeReducer', (edge, data) => {
+        const g = sigma.getGraph();
+        const src = g.source(edge);
+        const tgt = g.target(edge);
+        const hovered = hoveredRef.current;
+        const selected = selectedIdRef.current;
+
+        if (hovered) {
+          const connected = src === hovered || tgt === hovered;
+          if (!connected) return { ...data, hidden: true };
+          return { ...data, color: '#6366f1', size: 2 };
+        }
+
+        if (selected) {
+          const connected = src === selected || tgt === selected;
+          return {
+            ...data,
+            color: connected ? '#6366f1' : '#e2e8f040',
+            size: connected ? 2 : 0.5,
+          };
+        }
+
+        return data;
+      });
+
+      sigmaRef.current = sigma;
+
+      sigma.on('clickNode', ({ node }) => onNodeClickRef.current(node));
+      sigma.on('clickStage', () => onStageClickRef.current());
+      sigma.on('enterNode', ({ node }) => {
+        hoveredRef.current = node;
+        sigma.refresh();
+      });
+      sigma.on('leaveNode', () => {
+        hoveredRef.current = null;
+        sigma.refresh();
+      });
+    });
+
+    return () => {
+      killed = true;
+      sigmaRef.current?.kill();
+      sigmaRef.current = null;
+    };
+  }, [graph]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{ width: '100%', height: '100%', background: '#f8fafc' }}
+    />
   );
 }
