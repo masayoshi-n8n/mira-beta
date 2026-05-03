@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Sidebar } from './Sidebar';
 import { GlobalHeader } from './GlobalHeader';
 import { UploadModal } from '@/components/upload/UploadModal';
@@ -11,30 +11,30 @@ interface AppShellProps {
   children: React.ReactNode;
 }
 
+const DEMO_USER = {
+  name: 'Alex Chen',
+  email: 'alex.chen@linkedin.com',
+  role: 'Product Manager',
+  company: 'LinkedIn',
+};
+
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const isLoggedIn = useStore((s) => s.isLoggedIn);
-  const hasHydrated = useStore((s) => s._hasHydrated);
   const login = useStore((s) => s.login);
   const completeOnboarding = useStore((s) => s.completeOnboarding);
   const isPublicRoute = pathname === '/' || pathname === '/onboarding';
 
+  // Auto-login as demo user on any protected route so direct URLs always work
   useEffect(() => {
-    if (!hasHydrated) return;
     if (!isLoggedIn && !isPublicRoute) {
-      // Auto-login as the demo user so any URL works without a manual login step
-      login({ name: 'Alex Chen', email: 'alex.chen@linkedin.com', role: 'Product Manager', company: 'LinkedIn' });
+      login(DEMO_USER);
       completeOnboarding();
     }
-  }, [isLoggedIn, isPublicRoute, hasHydrated, login, completeOnboarding]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isPublicRoute) {
     return <>{children}</>;
-  }
-
-  if (!hasHydrated || !isLoggedIn) {
-    return null;
   }
 
   return (
