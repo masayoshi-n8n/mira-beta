@@ -115,7 +115,7 @@ export function LPMGraph({ nodes, edges }: LPMGraphProps) {
   }, []);
 
   return (
-    <div className="relative flex h-[calc(100vh-3.5rem)] w-full">
+    <div className="relative flex h-full w-full">
       <div className="flex-1" style={{ height: '100%' }}>
         <ReactFlow
           nodes={flowNodes}

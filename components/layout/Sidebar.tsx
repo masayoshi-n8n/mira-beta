@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, MessageSquare, Database, Layers, Store, Settings } from 'lucide-react';
+import { Home, MessageSquare, Database, Layers, Store, Settings, Network } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Home', icon: Home },
   { href: '/chat', label: 'Chat', icon: MessageSquare },
+  { href: '/product-map', label: 'Product Map', icon: Network },
   { href: '/knowledge-base', label: 'Knowledge Base', icon: Database },
   { href: '/projects', label: 'Projects', icon: Layers },
   { href: '/marketplace', label: 'Marketplace', icon: Store },
