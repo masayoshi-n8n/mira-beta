@@ -1,6 +1,6 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { X, PanelRightClose } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getNodeColor } from '@/lib/graph-utils';
@@ -10,6 +10,7 @@ import type { LPMNode } from '@/lib/types';
 interface NodeSidePanelProps {
   node: LPMNode;
   onClose: () => void;
+  onCollapse: () => void;
 }
 
 function confidenceLevel(score: number) {
@@ -28,7 +29,7 @@ const EDGE_TYPE_COLORS: Record<string, string> = {
   was_deprioritized_by: 'bg-orange-100 text-orange-700',
 };
 
-export function NodeSidePanel({ node, onClose }: NodeSidePanelProps) {
+export function NodeSidePanel({ node, onClose, onCollapse }: NodeSidePanelProps) {
   const edges = getEdgesForNode(node.id);
   const color = getNodeColor(node.type);
   const conf = confidenceLevel(node.confidence);
@@ -49,9 +50,14 @@ export function NodeSidePanel({ node, onClose }: NodeSidePanelProps) {
             <h3 className="mt-0.5 text-sm font-semibold leading-snug">{node.label}</h3>
           </div>
         </div>
-        <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0 -mt-0.5" onClick={onClose}>
-          <X className="h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-0.5 shrink-0 -mt-0.5">
+          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={onCollapse} title="Minimize panel">
+            <PanelRightClose className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={onClose} title="Close panel">
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
       {/* Body */}
