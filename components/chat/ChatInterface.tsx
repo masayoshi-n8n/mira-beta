@@ -1,93 +1,219 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { Send, Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { MessageBubble } from './MessageBubble';
+import { useState, useRef, useEffect } from 'react';
+import { Paperclip, Mic, Monitor, ArrowUp, Square, FileText, X, ChevronRight, Map } from 'lucide-react';
+import { getChatSessionById } from '@/lib/data';
 import { useStore } from '@/lib/store';
-import { getChatSessionById, getChatSessions } from '@/lib/data';
-import type { ChatMessage } from '@/lib/types';
-import Link from 'next/link';
+import type { ChatSession, ChatMessage, DecisionTraceNode } from '@/lib/types';
 
-interface ChatInterfaceProps {
+export interface ChatInterfaceProps {
+  session?: ChatSession;
   initialMessages?: ChatMessage[];
   sessionTitle?: string;
 }
 
-function ThinkingIndicator() {
-  return (
-    <div className="flex items-start gap-3">
-      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-xs font-bold text-white mt-0.5">
-        M
-      </div>
-      <div className="rounded-2xl rounded-tl-sm bg-muted/50 px-4 py-3">
-        <div className="flex gap-1 items-center h-4">
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-bounce"
-              style={{ animationDelay: `${i * 120}ms` }}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+const NODE_COLORS: Record<string, string> = {
+  feedback: 'bg-purple-500',
+  decision: 'bg-blue-600',
+  feature: 'bg-green-500',
+  metric: 'bg-orange-500',
+  persona: 'bg-pink-500',
+  competitor: 'bg-red-500',
+  epic: 'bg-indigo-500',
+  note: 'bg-yellow-400',
+};
 
 function matchSession(query: string): ChatMessage | null {
   const lower = query.toLowerCase();
   let sessionId: string | null = null;
 
-  if (
-    lower.includes('q3') ||
-    lower.includes('build first') ||
-    lower.includes('prioriti') ||
-    lower.includes('what should')
-  ) {
+  if (lower.includes('q3') || lower.includes('build first') || lower.includes('prioriti') || lower.includes('what should')) {
     sessionId = 'cs-001';
-  } else if (
-    (lower.includes('analytics') && (lower.includes('demand') || lower.includes('know'))) ||
-    lower.includes('creator analytics')
-  ) {
+  } else if ((lower.includes('analytics') && (lower.includes('demand') || lower.includes('know'))) || lower.includes('creator analytics')) {
     sessionId = 'cs-002';
-  } else if (
-    lower.includes('roadmap') ||
-    lower.includes('q1') ||
-    lower.includes('what changed') ||
-    lower.includes('changed in')
-  ) {
+  } else if (lower.includes('roadmap') || lower.includes('q1') || lower.includes('what changed') || lower.includes('changed in')) {
     sessionId = 'cs-003';
   }
 
   if (!sessionId) return null;
-  const session = getChatSessionById(sessionId);
-  return session?.messages.find((m) => m.role === 'mira') ?? null;
+  const s = getChatSessionById(sessionId);
+  return s?.messages.find((m) => m.role === 'mira') ?? null;
 }
 
-const FALLBACK_RESPONSE: ChatMessage = {
-  id: 'fallback',
-  role: 'mira',
-  content:
-    "I've searched your product context and found relevant signals. Based on the 28 nodes in your knowledge graph, this touches on decisions from your Q2 planning, creator interview feedback, and competitive intelligence.\n\nWant me to dig deeper into any specific aspect? You can also try asking about Q3 prioritization, creator analytics demand, or what changed in your Q1 roadmap.",
-  timestamp: new Date().toISOString(),
-  confidence: 'inferred',
-  provenance: [
-    {
-      layer: 'knowledge-graph',
-      source: 'LPM Knowledge Graph',
-      excerpt: '28 nodes and 25 connections searched across all signal types.',
-    },
-  ],
-};
+function ArtifactCard({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="flex items-start gap-3 bg-gray-50 border border-gray-200 rounded-xl p-4 my-3">
+      <FileText className="h-5 w-5 text-[#4F3DD5] shrink-0 mt-0.5" />
+      <div>
+        <p className="text-sm font-semibold text-gray-900">{title}</p>
+        <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+      </div>
+    </div>
+  );
+}
 
-export function ChatInterface({ initialMessages = [], sessionTitle }: ChatInterfaceProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
+function LPMBanner() {
+  return (
+    <div className="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-200 rounded-lg px-3 py-2 my-3 text-xs text-indigo-700">
+      <Map className="h-3.5 w-3.5 shrink-0" />
+      <span>LPM updated — 4 signals and 2 decisions added.</span>
+      <button className="font-semibold underline hover:no-underline ml-1">View Map</button>
+    </div>
+  );
+}
+
+function DecisionTraceViz({ nodes }: { nodes: DecisionTraceNode[] }) {
+  const [selectedNode, setSelectedNode] = useState<DecisionTraceNode | null>(null);
+
+  return (
+    <div className="my-4 border border-gray-200 rounded-xl overflow-hidden">
+      <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
+        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Decision Trace</p>
+      </div>
+      <div className="p-4 flex flex-wrap gap-2">
+        {nodes.map((node) => (
+          <button
+            key={node.id}
+            onClick={() => setSelectedNode(selectedNode?.id === node.id ? null : node)}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-xs font-medium transition-all ${
+              selectedNode?.id === node.id
+                ? 'border-[#4F3DD5] bg-indigo-50 text-[#4F3DD5]'
+                : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            <div className={`h-2 w-2 rounded-full shrink-0 ${NODE_COLORS[node.type] ?? 'bg-gray-400'}`} />
+            {node.label}
+          </button>
+        ))}
+      </div>
+      {selectedNode && (
+        <div className="px-4 pb-4 border-t border-gray-100 pt-3">
+          <div className="flex items-center gap-2 mb-1">
+            <div className={`h-2 w-2 rounded-full ${NODE_COLORS[selectedNode.type] ?? 'bg-gray-400'}`} />
+            <p className="text-xs font-semibold text-gray-900">{selectedNode.label}</p>
+            <span className="text-xs text-gray-400">· {selectedNode.source}</span>
+          </div>
+          <p className="text-xs text-gray-600 leading-relaxed">{selectedNode.detail}</p>
+          <div className="flex items-center gap-1 mt-2">
+            <div className="h-1 rounded-full bg-gray-200 flex-1">
+              <div className="h-1 rounded-full bg-[#4F3DD5]" style={{ width: `${selectedNode.confidence * 100}%` }} />
+            </div>
+            <span className="text-xs text-gray-400">{Math.round(selectedNode.confidence * 100)}% confidence</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MsgBubble({ message }: { message: ChatMessage }) {
+  const isUser = message.role === 'user';
+
+  if (isUser) {
+    return (
+      <div className="flex justify-end mb-4">
+        <div className="max-w-[70%] bg-gray-100 rounded-2xl rounded-tr-sm px-4 py-3">
+          {message.provenance && message.provenance.length > 0 && (
+            <div className="flex flex-wrap gap-1 mb-2">
+              {message.provenance.map((p, i) => (
+                <span key={i} className="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 text-xs text-gray-600">
+                  <FileText className="h-2.5 w-2.5" />
+                  {p.source}
+                  <X className="h-2.5 w-2.5 text-gray-400" />
+                </span>
+              ))}
+            </div>
+          )}
+          <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">{message.content}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const lines = message.content.split('\n');
+
+  return (
+    <div className="mb-6">
+      <div className="text-sm text-gray-800 leading-relaxed">
+        {lines.map((line, i) => {
+          if (line.startsWith('**') && line.endsWith('**')) {
+            return <p key={i} className="font-bold mt-3 mb-1">{line.slice(2, -2)}</p>;
+          }
+          if (line.startsWith('- ') || line.match(/^\d+\./)) {
+            return (
+              <div key={i} className="flex gap-2 ml-2 mb-1">
+                <span className="text-gray-400 shrink-0">{line.startsWith('- ') ? '·' : line.match(/^(\d+)\./)?.[1] + '.'}</span>
+                <span>{line.startsWith('- ') ? line.slice(2) : line.replace(/^\d+\.\s/, '')}</span>
+              </div>
+            );
+          }
+          if (line === '') return <div key={i} className="h-2" />;
+          return <p key={i} className="mb-1">{line}</p>;
+        })}
+      </div>
+
+      {message.decisionTrace && <DecisionTraceViz nodes={message.decisionTrace.nodes} />}
+
+      {message.role === 'mira' && message.content.includes('artifact') && (
+        <>
+          <ArtifactCard
+            title="Q3 Prioritization Brief"
+            description="A recommendation brief for Q3 with supporting signals, competitive context, and exec framing."
+          />
+          <LPMBanner />
+        </>
+      )}
+
+      {message.provenance && message.provenance.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-1">
+          {message.provenance.map((p, i) => (
+            <span key={i} className="inline-flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-full px-2.5 py-1 text-xs text-gray-500">
+              <div className={`h-1.5 w-1.5 rounded-full shrink-0 ${
+                p.layer === 'knowledge-graph' ? 'bg-indigo-400' : p.layer === 'vector-db' ? 'bg-purple-400' : 'bg-green-400'
+              }`} />
+              {p.source}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ProcessingState({ files }: { files: string[] }) {
+  return (
+    <div className="mb-6 space-y-2">
+      {files.map((file, i) => (
+        <div key={i} className="flex items-start gap-2">
+          <span className="text-green-500 text-xs mt-0.5">✓</span>
+          <div>
+            <p className="text-sm font-medium text-gray-800">{file} read</p>
+            <p className="text-xs text-gray-400">Extracting signals and mapping to LPM...</p>
+          </div>
+        </div>
+      ))}
+      <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
+        <div className="h-3.5 w-3.5 rounded-full border-2 border-gray-300 border-t-[#4F3DD5] animate-spin" />
+        Pulling this together...
+      </div>
+    </div>
+  );
+}
+
+const FALLBACK_RESPONSE = "I've searched your product context and found relevant signals. Based on the 28 nodes in your knowledge graph, this touches on decisions from your Q2 planning, creator interview feedback, and competitive intelligence.\n\nWant me to dig deeper into any specific aspect? You can also try asking about Q3 prioritization, creator analytics demand, or what changed in your Q1 roadmap.";
+
+export function ChatInterface({ session, initialMessages, sessionTitle }: ChatInterfaceProps) {
+  const startMessages = session?.messages ?? initialMessages ?? [];
+  const title = session?.title ?? sessionTitle ?? 'New Chat';
+
+  const [messages, setMessages] = useState<ChatMessage[]>(startMessages);
   const [input, setInput] = useState('');
-  const [isThinking, setIsThinking] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [showProcessing, setShowProcessing] = useState(false);
+  const [attachedFiles, setAttachedFiles] = useState<string[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const sessions = getChatSessions();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const preloadedPrompt = useStore((s) => s.preloadedPrompt);
   const setPreloadedPrompt = useStore((s) => s.setPreloadedPrompt);
@@ -96,142 +222,151 @@ export function ChatInterface({ initialMessages = [], sessionTitle }: ChatInterf
     if (preloadedPrompt) {
       setInput(preloadedPrompt);
       setPreloadedPrompt(null);
-      textareaRef.current?.focus();
     }
   }, [preloadedPrompt, setPreloadedPrompt]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isThinking]);
+  }, [messages, showProcessing]);
 
-  async function handleSubmit() {
-    const text = input.trim();
-    if (!text || isThinking) return;
+  function handleSend() {
+    if (!input.trim() && attachedFiles.length === 0) return;
+    if (isGenerating) { setIsGenerating(false); return; }
 
     const userMsg: ChatMessage = {
-      id: `u-${Date.now()}`,
+      id: `msg-${Date.now()}`,
       role: 'user',
-      content: text,
+      content: input,
       timestamp: new Date().toISOString(),
+      provenance: attachedFiles.map((f) => ({ layer: 'vector-db', source: f, excerpt: '' })),
     };
 
     setMessages((prev) => [...prev, userMsg]);
+    const query = input;
     setInput('');
-    setIsThinking(true);
+    setAttachedFiles([]);
+    setIsGenerating(true);
 
-    await new Promise((r) => setTimeout(r, 1600));
-
-    const matched = matchSession(text);
-    const miraMsg: ChatMessage = matched
-      ? { ...matched, id: `m-${Date.now()}`, timestamp: new Date().toISOString() }
-      : { ...FALLBACK_RESPONSE, id: `m-${Date.now()}`, timestamp: new Date().toISOString() };
-
-    setIsThinking(false);
-    setMessages((prev) => [...prev, miraMsg]);
-  }
-
-  function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit();
+    if (attachedFiles.length > 0) {
+      setShowProcessing(true);
+      setTimeout(() => {
+        setShowProcessing(false);
+        addMiraResponse(query);
+      }, 3000);
+    } else {
+      setTimeout(() => addMiraResponse(query), 1500);
     }
   }
 
+  function addMiraResponse(query: string) {
+    const matched = matchSession(query);
+    const miraMsg: ChatMessage = matched
+      ? { ...matched, id: `m-${Date.now()}`, timestamp: new Date().toISOString() }
+      : {
+          id: `m-${Date.now()}`,
+          role: 'mira',
+          content: FALLBACK_RESPONSE,
+          timestamp: new Date().toISOString(),
+          confidence: 'inferred',
+        };
+    setMessages((prev) => [...prev, miraMsg]);
+    setIsGenerating(false);
+  }
+
+  function handleFileAttach() { fileInputRef.current?.click(); }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    setAttachedFiles((prev) => [...prev, ...files.map((f) => f.name)]);
+    e.target.value = '';
+  }
+
+  const materialsCount = messages.filter((m) => m.role === 'mira' && m.decisionTrace).length + 1;
+
   return (
-    <div className="flex h-[calc(100vh-3.5rem)]">
-      {/* Sidebar */}
-      <aside className="hidden w-60 shrink-0 flex-col border-r lg:flex">
-        <div className="flex items-center justify-between border-b px-4 py-3">
-          <span className="text-sm font-semibold">Chats</span>
-          <Link href="/chat">
-            <Button variant="ghost" size="icon" className="h-7 w-7">
-              <Plus className="h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
-        <div className="flex flex-col gap-0.5 overflow-y-auto p-2">
-          {sessions.map((s) => (
-            <Link
-              key={s.id}
-              href={`/chat/${s.id}`}
-              className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors line-clamp-2"
-            >
-              {s.title}
-            </Link>
-          ))}
-        </div>
-      </aside>
-
-      {/* Main chat */}
-      <div className="flex flex-1 flex-col min-w-0">
-        {/* Title bar */}
-        {sessionTitle && (
-          <div className="border-b px-6 py-3">
-            <h1 className="text-sm font-semibold truncate">{sessionTitle}</h1>
+    <div className="flex h-full">
+      <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex items-center justify-between px-6 py-3 border-b border-gray-100 shrink-0">
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <button className="hover:text-gray-700 transition-colors">Chats</button>
+            <ChevronRight className="h-3 w-3" />
+            <span className="font-medium text-gray-900">{title}</span>
           </div>
-        )}
+          <div className="flex items-center gap-1.5 text-sm text-gray-500">
+            <FileText className="h-4 w-4" />
+            <span>{materialsCount} Materials</span>
+          </div>
+        </div>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
-          {messages.length === 0 && !isThinking && (
-            <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-600">
-                <span className="text-2xl font-bold text-white">M</span>
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold">Ask Mira anything</h2>
-                <p className="mt-1 text-sm text-muted-foreground max-w-sm">
-                  Mira has 60 days of your product context — decisions, feedback,
-                  metrics, and competitor signals.
-                </p>
-              </div>
-              <div className="flex flex-col gap-2 w-full max-w-sm">
-                {['What should we build first in Q3?', 'What do we know about creator analytics demand?', 'What changed in our roadmap in Q1?'].map((q) => (
-                  <button
-                    key={q}
-                    onClick={() => setInput(q)}
-                    className="rounded-lg border px-4 py-2.5 text-sm text-left text-muted-foreground hover:border-indigo-300 hover:text-foreground hover:bg-indigo-50/50 transition-colors"
-                  >
-                    {q}
-                  </button>
-                ))}
-              </div>
+        <div className="flex-1 overflow-y-auto px-10 py-8 max-w-3xl mx-auto w-full">
+          {messages.map((msg) => (
+            <MsgBubble key={msg.id} message={msg} />
+          ))}
+
+          {showProcessing && (
+            <ProcessingState files={attachedFiles.length > 0 ? attachedFiles : ['NPS_Report_Q1.pdf', 'Creator_Interviews.docx']} />
+          )}
+
+          {isGenerating && !showProcessing && (
+            <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
+              <div className="h-3.5 w-3.5 rounded-full border-2 border-gray-300 border-t-[#4F3DD5] animate-spin" />
+              Reading your situation — identifying the right structure.
             </div>
           )}
 
-          {messages.map((msg) => (
-            <MessageBubble key={msg.id} message={msg} />
-          ))}
-
-          {isThinking && <ThinkingIndicator />}
           <div ref={bottomRef} />
         </div>
 
-        {/* Input */}
-        <div className="border-t bg-background px-6 py-4">
-          <div className="flex items-end gap-3 rounded-xl border bg-muted/30 px-4 py-3 focus-within:border-indigo-300 focus-within:ring-1 focus-within:ring-indigo-200 transition-all">
-            <textarea
-              ref={textareaRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Ask Mira about your product context…"
-              rows={1}
-              className="flex-1 resize-none bg-transparent text-sm outline-none placeholder:text-muted-foreground max-h-40"
-              style={{ minHeight: '24px' }}
-            />
-            <Button
-              size="icon"
-              className="h-8 w-8 shrink-0 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40"
-              onClick={handleSubmit}
-              disabled={!input.trim() || isThinking}
-            >
-              <Send className="h-3.5 w-3.5" />
-            </Button>
+        <div className="px-10 pb-6 max-w-3xl mx-auto w-full shrink-0">
+          {attachedFiles.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-2">
+              {attachedFiles.map((file, i) => (
+                <span key={i} className="inline-flex items-center gap-1.5 bg-gray-100 rounded-full px-3 py-1 text-xs text-gray-700">
+                  {file}
+                  <button onClick={() => setAttachedFiles((prev) => prev.filter((_, j) => j !== i))}>
+                    <X className="h-3 w-3 text-gray-400 hover:text-gray-600" />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className={focused ? 'gradient-border-wrap' : 'border-2 border-gray-200 rounded-xl'}>
+            <div className={focused ? 'gradient-border-inner p-4' : 'p-4'}>
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+                }}
+                placeholder={messages.length > 1 ? 'Type your follow up...' : "Tell Mira what you're trying to figure out."}
+                rows={3}
+                className="w-full resize-none outline-none text-sm text-gray-800 placeholder:text-gray-400 bg-transparent"
+              />
+              <div className="flex items-center justify-between mt-3">
+                <div className="flex items-center gap-3 text-gray-400">
+                  <button onClick={handleFileAttach} className="hover:text-gray-600 transition-colors">
+                    <Paperclip className="h-4 w-4" />
+                  </button>
+                  <button className="hover:text-gray-600 transition-colors"><Mic className="h-4 w-4" /></button>
+                  <button className="hover:text-gray-600 transition-colors"><Monitor className="h-4 w-4" /></button>
+                </div>
+                <button
+                  onClick={handleSend}
+                  className={`h-9 w-9 rounded-full flex items-center justify-center transition-all shadow-sm ${
+                    isGenerating ? 'bg-[#4F3DD5] text-white'
+                    : input.trim() || attachedFiles.length > 0 ? 'bg-[#4F3DD5] hover:bg-[#3d2fb8] text-white'
+                    : 'bg-gray-200 text-gray-400'
+                  }`}
+                >
+                  {isGenerating ? <Square className="h-3.5 w-3.5" fill="white" /> : <ArrowUp className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
           </div>
-          <p className="mt-2 text-center text-[10px] text-muted-foreground">
-            Mira grounds every answer in your actual product context.
-          </p>
+          <input ref={fileInputRef} type="file" multiple className="hidden" onChange={handleFileChange} />
         </div>
       </div>
     </div>
