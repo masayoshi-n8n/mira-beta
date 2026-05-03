@@ -12,6 +12,7 @@ interface User {
 }
 
 interface AppState {
+  _hasHydrated: boolean;
   isLoggedIn: boolean;
   hasCompletedOnboarding: boolean;
   user: User | null;
@@ -22,6 +23,7 @@ interface AppState {
   preloadedPrompt: string | null;
   sidebarCollapsed: boolean;
 
+  setHasHydrated: (v: boolean) => void;
   login: (user: User) => void;
   logout: () => void;
   completeOnboarding: () => void;
@@ -37,6 +39,7 @@ interface AppState {
 export const useStore = create<AppState>()(
   persist(
     (set) => ({
+      _hasHydrated: false,
       isLoggedIn: false,
       hasCompletedOnboarding: false,
       user: null,
@@ -47,6 +50,7 @@ export const useStore = create<AppState>()(
       preloadedPrompt: null,
       sidebarCollapsed: false,
 
+      setHasHydrated: (v) => set({ _hasHydrated: v }),
       login: (user) => set({ isLoggedIn: true, user }),
       logout: () =>
         set({ isLoggedIn: false, user: null, hasCompletedOnboarding: false }),
@@ -69,6 +73,9 @@ export const useStore = create<AppState>()(
         notificationCount: state.notificationCount,
         sidebarCollapsed: state.sidebarCollapsed,
       }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

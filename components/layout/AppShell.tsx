@@ -15,19 +15,21 @@ export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const isLoggedIn = useStore((s) => s.isLoggedIn);
+  const hasHydrated = useStore((s) => s._hasHydrated);
   const isPublicRoute = pathname === '/' || pathname === '/onboarding';
 
   useEffect(() => {
+    if (!hasHydrated) return;
     if (!isLoggedIn && !isPublicRoute) {
       router.push('/');
     }
-  }, [isLoggedIn, isPublicRoute, router]);
+  }, [isLoggedIn, isPublicRoute, router, hasHydrated]);
 
   if (isPublicRoute) {
     return <>{children}</>;
   }
 
-  if (!isLoggedIn) {
+  if (!hasHydrated || !isLoggedIn) {
     return null;
   }
 
