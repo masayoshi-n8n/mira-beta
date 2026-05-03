@@ -20,6 +20,7 @@ interface AppState {
   notificationCount: number;
   currentChatSessionId: string | null;
   preloadedPrompt: string | null;
+  sidebarCollapsed: boolean;
 
   login: (user: User) => void;
   logout: () => void;
@@ -30,6 +31,7 @@ interface AppState {
   setPreloadedPrompt: (prompt: string | null) => void;
   decrementNotifications: () => void;
   resetNotifications: () => void;
+  setSidebarCollapsed: (collapsed: boolean) => void;
 }
 
 export const useStore = create<AppState>()(
@@ -43,6 +45,7 @@ export const useStore = create<AppState>()(
       notificationCount: 3,
       currentChatSessionId: null,
       preloadedPrompt: null,
+      sidebarCollapsed: false,
 
       login: (user) => set({ isLoggedIn: true, user }),
       logout: () =>
@@ -55,6 +58,7 @@ export const useStore = create<AppState>()(
       decrementNotifications: () =>
         set((s) => ({ notificationCount: Math.max(0, s.notificationCount - 1) })),
       resetNotifications: () => set({ notificationCount: 0 }),
+      setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
     }),
     {
       name: 'mira-app-state',
@@ -63,6 +67,7 @@ export const useStore = create<AppState>()(
         hasCompletedOnboarding: state.hasCompletedOnboarding,
         user: state.user,
         notificationCount: state.notificationCount,
+        sidebarCollapsed: state.sidebarCollapsed,
       }),
     }
   )
