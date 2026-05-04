@@ -12,10 +12,10 @@ const SigmaGraph = dynamic<SigmaGraphProps>(
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-full w-full items-center justify-center bg-slate-50">
+      <div className="flex h-full w-full items-center justify-center bg-[#080b10]">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
-          <p className="text-xs text-muted-foreground">Loading knowledge graph…</p>
+          <div className="h-7 w-7 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
+          <p className="text-xs text-slate-500">Initialising graph…</p>
         </div>
       </div>
     ),
@@ -30,40 +30,27 @@ interface LPMGraphProps {
   externalHighlightIds?: string[] | null;
 }
 
-export function LPMGraph({
-  nodes,
-  edges,
-  selectedNodeId: controlledSelectedId,
-  onNodeSelect,
-  externalHighlightIds,
-}: LPMGraphProps) {
-  const [internalSelectedId, setInternalSelectedId] = useState<string | null>(null);
+export function LPMGraph({ nodes, edges, selectedNodeId: controlledId, onNodeSelect, externalHighlightIds }: LPMGraphProps) {
+  const [internalId,       setInternalId]       = useState<string | null>(null);
   const [controlsCollapsed, setControlsCollapsed] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeTypeFilters, setActiveTypeFilters] = useState<NodeType[]>([]);
+  const [searchQuery,       setSearchQuery]       = useState('');
+  const [activeFilters,     setActiveFilters]     = useState<NodeType[]>([]);
+  const [depth,             setDepth]             = useState(0);
 
-  const selectedNodeId = controlledSelectedId !== undefined ? controlledSelectedId : internalSelectedId;
-  const graph = useMemo(() => buildSigmaGraph(nodes, edges), [nodes, edges]);
+  const selectedNodeId = controlledId !== undefined ? controlledId : internalId;
+  const graph          = useMemo(() => buildSigmaGraph(nodes, edges), [nodes, edges]);
 
   function handleNodeClick(id: string) {
     const newId = selectedNodeId === id ? null : id;
-    if (onNodeSelect) {
-      onNodeSelect(newId);
-    } else {
-      setInternalSelectedId(newId);
-    }
+    onNodeSelect ? onNodeSelect(newId) : setInternalId(newId);
   }
 
   function handleStageClick() {
-    if (onNodeSelect) {
-      onNodeSelect(null);
-    } else {
-      setInternalSelectedId(null);
-    }
+    onNodeSelect ? onNodeSelect(null) : setInternalId(null);
   }
 
   return (
-    <div className="relative h-full w-full bg-slate-50">
+    <div className="relative h-full w-full bg-[#080b10]">
       <div className="absolute inset-0">
         <SigmaGraph
           graph={graph}
@@ -71,23 +58,28 @@ export function LPMGraph({
           onNodeClick={handleNodeClick}
           onStageClick={handleStageClick}
           searchQuery={searchQuery}
-          activeFilters={activeTypeFilters}
+          activeFilters={activeFilters}
+          depth={depth}
           externalHighlightIds={externalHighlightIds}
         />
       </div>
 
+      {/* Controls — top left */}
       <div className="absolute left-4 top-4 z-10">
         <GraphControls
           collapsed={controlsCollapsed}
+          depth={depth}
           onToggleCollapse={() => setControlsCollapsed((c) => !c)}
           onSearch={setSearchQuery}
-          onFilter={setActiveTypeFilters}
+          onFilter={setActiveFilters}
+          onDepthChange={setDepth}
         />
       </div>
 
+      {/* Stats pill — bottom left */}
       <div className="absolute bottom-4 left-4 z-10">
-        <div className="rounded-lg border bg-white/95 backdrop-blur-sm px-3 py-1.5 text-xs text-muted-foreground shadow-sm">
-          {nodes.length} nodes · {edges.length} connections
+        <div className="rounded-full border border-white/10 bg-[#0f1623]/80 backdrop-blur-sm px-3 py-1 text-[10px] text-slate-500 font-mono">
+          {nodes.length} nodes · {edges.length} edges
         </div>
       </div>
     </div>
