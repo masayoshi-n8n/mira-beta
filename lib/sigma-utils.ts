@@ -32,7 +32,17 @@ const NODE_COLOR_MAP: Record<NodeType, string> = {
   persona: '#ec4899',
   competitor: '#ef4444',
   epic: '#6366f1',
-  note: '#facc15',
+  note: '#eab308',
+};
+
+const EDGE_COLOR_MAP: Record<string, string> = {
+  influenced: '#a855f7cc',
+  caused: '#6366f1cc',
+  preceded: '#94a3b8cc',
+  contradicts: '#ef4444cc',
+  relates_to: '#64748bcc',
+  is_child_of: '#22c55ecc',
+  was_deprioritized_by: '#f97316cc',
 };
 
 export function buildSigmaGraph(nodes: LPMNode[], edges: LPMEdge[]): SigmaGraphType {
@@ -42,7 +52,7 @@ export function buildSigmaGraph(nodes: LPMNode[], edges: LPMEdge[]): SigmaGraphT
     const angle = (i / nodes.length) * 2 * Math.PI;
     graph.addNode(node.id, {
       label: node.label,
-      size: 8 + node.confidence * 8,
+      size: 10 + node.confidence * 10,
       color: NODE_COLOR_MAP[node.type],
       x: Math.cos(angle),
       y: Math.sin(angle),
@@ -59,10 +69,11 @@ export function buildSigmaGraph(nodes: LPMNode[], edges: LPMEdge[]): SigmaGraphT
       graph.hasNode(edge.target) &&
       !graph.hasEdge(edge.source, edge.target)
     ) {
+      const edgeColor = EDGE_COLOR_MAP[edge.type] ?? '#94a3b8cc';
       graph.addEdge(edge.source, edge.target, {
         label: edge.type.replace(/_/g, ' '),
-        size: edge.confidence > 0.8 ? 2 : 1,
-        color: edge.confidence > 0.8 ? '#818cf880' : '#cbd5e180',
+        size: 1.5 + edge.confidence * 2.5,
+        color: edgeColor,
         edgeType: edge.type,
         confidence: edge.confidence,
       });

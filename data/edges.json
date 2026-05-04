@@ -223,5 +223,203 @@
     "confidence": 0.79,
     "inferredSource": "Follower growth decline research corroborates creator interview findings",
     "timestamp": "2026-03-28T10:00:00Z"
+  },
+  {
+    "id": "e-026",
+    "source": "fb-006",
+    "target": "ft-001",
+    "type": "influenced",
+    "confidence": 0.93,
+    "inferredSource": "Exit survey analytics signal directly influenced analytics dashboard priority",
+    "timestamp": "2026-04-10T09:00:00Z"
+  },
+  {
+    "id": "e-027",
+    "source": "fb-006",
+    "target": "dc-004",
+    "type": "influenced",
+    "confidence": 0.88,
+    "inferredSource": "Churn signal from exit surveys reinforced Q3 analytics prioritization",
+    "timestamp": "2026-04-10T09:00:00Z"
+  },
+  {
+    "id": "e-028",
+    "source": "fb-007",
+    "target": "ft-003",
+    "type": "influenced",
+    "confidence": 0.84,
+    "inferredSource": "Monetization friction feedback influenced Newsletter Monetization feature scope",
+    "timestamp": "2026-03-30T11:00:00Z"
+  },
+  {
+    "id": "e-029",
+    "source": "fb-007",
+    "target": "ps-003",
+    "type": "relates_to",
+    "confidence": 0.80,
+    "inferredSource": "Monetization workflow complaints map to Newsletter Subscriber persona",
+    "timestamp": "2026-03-30T11:00:00Z"
+  },
+  {
+    "id": "e-030",
+    "source": "nt-004",
+    "target": "dc-005",
+    "type": "caused",
+    "confidence": 0.98,
+    "inferredSource": "Legal memo on payment classification directly caused Creator Fund hold decision",
+    "timestamp": "2026-02-12T09:00:00Z"
+  },
+  {
+    "id": "e-031",
+    "source": "dc-005",
+    "target": "ep-004",
+    "type": "influenced",
+    "confidence": 0.97,
+    "inferredSource": "Creator Fund legal hold directly constrained Creator Fund Beta epic scope",
+    "timestamp": "2026-02-14T10:00:00Z"
+  },
+  {
+    "id": "e-032",
+    "source": "dc-005",
+    "target": "ft-004",
+    "type": "influenced",
+    "confidence": 0.95,
+    "inferredSource": "Legal hold decision forced feature scope reduction for Creator Fund",
+    "timestamp": "2026-02-14T10:00:00Z"
+  },
+  {
+    "id": "e-033",
+    "source": "ft-005",
+    "target": "ep-001",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy",
+    "timestamp": "2026-03-01T09:00:00Z"
+  },
+  {
+    "id": "e-034",
+    "source": "ft-006",
+    "target": "ep-002",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy",
+    "timestamp": "2026-02-15T09:00:00Z"
+  },
+  {
+    "id": "e-035",
+    "source": "mt-004",
+    "target": "ft-001",
+    "type": "relates_to",
+    "confidence": 0.87,
+    "inferredSource": "Follower growth rate is a key outcome metric for analytics dashboard adoption",
+    "timestamp": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "e-036",
+    "source": "mt-005",
+    "target": "dc-004",
+    "type": "influenced",
+    "confidence": 0.91,
+    "inferredSource": "Power Creator churn trend reinforced analytics prioritization in Q3 planning",
+    "timestamp": "2026-04-12T10:00:00Z"
+  },
+  {
+    "id": "e-037",
+    "source": "mt-005",
+    "target": "ps-001",
+    "type": "relates_to",
+    "confidence": 0.89,
+    "inferredSource": "Churn rate metric is a primary health indicator for the Power Creator persona",
+    "timestamp": "2026-04-12T10:00:00Z"
+  },
+  {
+    "id": "e-038",
+    "source": "ps-003",
+    "target": "ft-003",
+    "type": "relates_to",
+    "confidence": 0.85,
+    "inferredSource": "Newsletter Subscriber persona is primary target user for monetization feature",
+    "timestamp": "2026-03-05T09:00:00Z"
+  },
+  {
+    "id": "e-039",
+    "source": "cp-004",
+    "target": "ft-003",
+    "type": "influenced",
+    "confidence": 0.78,
+    "inferredSource": "Ghost.org subscription model informs LinkedIn Newsletter Monetization feature design",
+    "timestamp": "2026-03-18T09:00:00Z"
+  },
+  {
+    "id": "e-040",
+    "source": "cp-004",
+    "target": "cp-001",
+    "type": "relates_to",
+    "confidence": 0.82,
+    "inferredSource": "Ghost.org and Substack are direct competitors in the creator monetization space",
+    "timestamp": "2026-03-18T09:00:00Z"
+  },
+  {
+    "id": "e-041",
+    "source": "nt-005",
+    "target": "mt-005",
+    "type": "caused",
+    "confidence": 0.90,
+    "inferredSource": "Power Creator growth report surfaced churn signal that caused churn metric to be tracked",
+    "timestamp": "2026-04-05T09:00:00Z"
+  },
+  {
+    "id": "e-042",
+    "source": "nt-006",
+    "target": "ft-001",
+    "type": "influenced",
+    "confidence": 0.92,
+    "inferredSource": "Engineering spike confirmed analytics pipeline feasibility, enabling feature prioritization",
+    "timestamp": "2026-04-15T13:00:00Z"
+  },
+  {
+    "id": "e-043",
+    "source": "ep-005",
+    "target": "mt-004",
+    "type": "relates_to",
+    "confidence": 0.85,
+    "inferredSource": "Creator Growth Acceleration epic targets follower growth rate as key success metric",
+    "timestamp": "2026-04-01T09:00:00Z"
+  },
+  {
+    "id": "e-044",
+    "source": "ep-005",
+    "target": "ps-001",
+    "type": "relates_to",
+    "confidence": 0.88,
+    "inferredSource": "Creator Growth Acceleration epic is primarily designed for the Power Creator persona",
+    "timestamp": "2026-04-01T09:00:00Z"
+  },
+  {
+    "id": "e-045",
+    "source": "fb-006",
+    "target": "ps-001",
+    "type": "relates_to",
+    "confidence": 0.86,
+    "inferredSource": "Exit survey churn signals disproportionately come from the Power Creator segment",
+    "timestamp": "2026-04-10T09:00:00Z"
+  },
+  {
+    "id": "e-046",
+    "source": "nt-003",
+    "target": "mt-004",
+    "type": "relates_to",
+    "confidence": 0.81,
+    "inferredSource": "Follower growth decline research directly relates to Follower Growth Rate metric",
+    "timestamp": "2026-03-28T10:00:00Z"
+  },
+  {
+    "id": "e-047",
+    "source": "cp-003",
+    "target": "ft-002",
+    "type": "influenced",
+    "confidence": 0.77,
+    "inferredSource": "TikTok Creator tools scheduling features created competitive pressure on Post Scheduling v2",
+    "timestamp": "2026-04-02T09:00:00Z"
   }
 ]

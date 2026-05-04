@@ -17,6 +17,17 @@ export interface SigmaGraphProps {
 // Lazy type — sigma is only ever imported inside useEffect (browser only)
 type SigmaInstance = import('sigma').Sigma<SigmaNodeAttributes, SigmaEdgeAttributes>;
 
+const TYPE_BADGE: Record<NodeType, string> = {
+  feedback: 'FB',
+  decision: 'DC',
+  feature: 'FT',
+  metric: 'MT',
+  persona: 'PS',
+  competitor: 'CP',
+  epic: 'EP',
+  note: 'NT',
+};
+
 export function SigmaGraph({
   graph,
   selectedId,
@@ -27,6 +38,7 @@ export function SigmaGraph({
   onStageClick,
 }: SigmaGraphProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const badgesRef = useRef<HTMLCanvasElement>(null);
   const sigmaRef = useRef<SigmaInstance | null>(null);
 
   // Mutable refs — reducer closures read from these without re-initializing sigma
@@ -95,7 +107,7 @@ export function SigmaGraph({
           !matchesExternal ||
           (hovered !== null && !isActive);
 
-        const baseSize = data.size ?? 10;
+        const baseSize = data.size ?? 12;
 
         return {
           ...data,
@@ -117,7 +129,7 @@ export function SigmaGraph({
         if (hovered) {
           const connected = src === hovered || tgt === hovered;
           if (!connected) return { ...data, hidden: true };
-          return { ...data, color: '#6366f1', size: 2 };
+          return { ...data, color: '#6366f1', size: 3 };
         }
 
         if (selected) {
@@ -125,12 +137,52 @@ export function SigmaGraph({
           return {
             ...data,
             color: connected ? '#6366f1' : '#e2e8f040',
-            size: connected ? 2 : 0.5,
+            size: connected ? 3 : 0.5,
           };
         }
 
         return data;
       });
+
+      // Draw type badge abbreviations on top of each visible node
+      function drawBadges() {
+        const canvas = badgesRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const rect = container.getBoundingClientRect();
+        if (canvas.width !== rect.width || canvas.height !== rect.height) {
+          canvas.width = rect.width;
+          canvas.height = rect.height;
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        sigma.getGraph().forEachNode((node, attrs) => {
+          const displayData = sigma.getNodeDisplayData(node);
+          if (!displayData) return;
+          // Skip faded nodes
+          if (displayData.color === '#e2e8f0') return;
+
+          // Convert graph-space coords to screen pixels
+          const viewport = sigma.graphToViewport({ x: attrs.x, y: attrs.y });
+          const screenSize = displayData.size / sigma.getCamera().ratio;
+          const fontSize = Math.max(6, Math.min(screenSize * 0.5, 12));
+
+          const badge = TYPE_BADGE[attrs.nodeType as NodeType] ?? '??';
+
+          ctx.save();
+          ctx.font = `bold ${fontSize}px monospace`;
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(badge, viewport.x, viewport.y);
+          ctx.restore();
+        });
+      }
+
+      sigma.on('afterRender', drawBadges);
 
       sigmaRef.current = sigma;
 
@@ -154,9 +206,22 @@ export function SigmaGraph({
   }, [graph]);
 
   return (
-    <div
-      ref={containerRef}
-      style={{ width: '100%', height: '100%', background: '#f8fafc' }}
-    />
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <div
+        ref={containerRef}
+        style={{ width: '100%', height: '100%', background: '#f8fafc' }}
+      />
+      <canvas
+        ref={badgesRef}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          pointerEvents: 'none',
+        }}
+      />
+    </div>
   );
 }

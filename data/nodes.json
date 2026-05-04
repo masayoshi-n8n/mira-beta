@@ -80,6 +80,38 @@
     }
   },
   {
+    "id": "fb-006",
+    "type": "feedback",
+    "label": "Exit survey cluster — analytics top churn reason",
+    "description": "Q1 exit survey analysis across 312 churned creators. 34% cited 'no analytics' as primary reason for leaving. 21% mentioned Substack's dashboard as the pull factor. Highest exit signal in 6 quarters.",
+    "source": "Exit Surveys",
+    "sourceItemId": "kb-002",
+    "timestamp": "2026-04-01T09:00:00Z",
+    "confidence": 0.93,
+    "metadata": {
+      "surveyCount": 312,
+      "primaryChurnReason": "no_analytics",
+      "substackMention": "21%",
+      "analyticsChurn": "34%"
+    }
+  },
+  {
+    "id": "fb-007",
+    "type": "feedback",
+    "label": "Creator monetization workflow — high friction signal",
+    "description": "7 creator interviews noted the friction of using external tools (Gumroad, Patreon) alongside LinkedIn. Quote: 'I have three dashboards open at once. LinkedIn sends the audience, I collect money elsewhere. That's broken.'",
+    "source": "Interview Notes",
+    "sourceItemId": "kb-002",
+    "timestamp": "2026-02-28T14:00:00Z",
+    "confidence": 0.80,
+    "metadata": {
+      "interviewCount": 7,
+      "frictionScore": "high",
+      "externalTools": "Gumroad, Patreon, Stripe",
+      "willingness_to_pay": true
+    }
+  },
+  {
     "id": "dc-001",
     "type": "decision",
     "label": "Q2 Planning: Prioritize Post Scheduling v2",
@@ -142,6 +174,23 @@
       "optionASignals": "68 NPS, 40% growth, 14 interviews, churn risk",
       "optionBSignals": "VP mandate, Substack revenue signal",
       "recommendedPath": "Creator Analytics first, Monetization Q4"
+    }
+  },
+  {
+    "id": "dc-005",
+    "type": "decision",
+    "label": "Creator Fund legal hold — payment processor exclusion",
+    "description": "Legal team issued a hold on Creator Fund Beta after determining that LinkedIn's primary payment processor (Stripe) cannot support the creator fund model due to regulatory classification issues in 7 markets.",
+    "source": "Legal Memo",
+    "sourceItemId": "kb-007",
+    "timestamp": "2025-12-10T10:00:00Z",
+    "confidence": 0.97,
+    "metadata": {
+      "issuedBy": "Legal Team",
+      "blockedMarkets": 7,
+      "processor": "Stripe",
+      "resolution": "pending_compliance_review",
+      "estimatedResolveDate": "2026-07-01"
     }
   },
   {
@@ -210,6 +259,38 @@
     }
   },
   {
+    "id": "ft-005",
+    "type": "feature",
+    "label": "Content Performance Benchmarking",
+    "description": "Sub-feature of Creator Analytics: benchmark a creator's content performance against anonymized peer averages by category, follower tier, and post type. Answers 'Am I growing fast enough?'",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2026-03-01T09:00:00Z",
+    "confidence": 0.84,
+    "metadata": {
+      "status": "design",
+      "epicId": "ep-001",
+      "estimatedEng": "2 weeks",
+      "parentFeature": "ft-001"
+    }
+  },
+  {
+    "id": "ft-006",
+    "type": "feature",
+    "label": "Creator Content Calendar",
+    "description": "Visual calendar view for scheduling posts, newsletters, and articles. Drag-and-drop rescheduling, optimal posting time overlay (ML-powered), and integration with LinkedIn drafts.",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2026-01-20T10:00:00Z",
+    "confidence": 0.96,
+    "metadata": {
+      "status": "in_development",
+      "epicId": "ep-002",
+      "estimatedEng": "2 weeks",
+      "parentFeature": "ft-002"
+    }
+  },
+  {
     "id": "mt-001",
     "type": "metric",
     "label": "Weekly Active Creators (WAC)",
@@ -261,6 +342,40 @@
     }
   },
   {
+    "id": "mt-004",
+    "type": "metric",
+    "label": "Follower Growth Rate (FGR)",
+    "description": "Month-over-month follower growth for creators with 10K+ followers. Current: declining 8% YoY among Power Creators. Industry benchmark (Substack): +12% MoM for newsletter subscribers. Critical health indicator.",
+    "source": "Internal Metrics",
+    "sourceItemId": "kb-005",
+    "timestamp": "2026-04-01T00:00:00Z",
+    "confidence": 0.90,
+    "metadata": {
+      "currentTrend": "-8% YoY (Power Creators)",
+      "substackBenchmark": "+12% MoM",
+      "targetSegment": "10K+ followers",
+      "period": "monthly",
+      "lastUpdated": "2026-04-01"
+    }
+  },
+  {
+    "id": "mt-005",
+    "type": "metric",
+    "label": "Power Creator Churn Rate",
+    "description": "Monthly churn rate for Power Creators (50K+ followers). Q1 2026: 3x higher than Q4 2025. 34% of churned creators cited analytics gap in exit surveys. Direct input into Q3 prioritization.",
+    "source": "Internal Metrics",
+    "sourceItemId": "kb-005",
+    "timestamp": "2026-04-08T00:00:00Z",
+    "confidence": 0.94,
+    "metadata": {
+      "churnMultiple": "3x vs Q4 2025",
+      "segment": "50K+ followers",
+      "exitAnalyticsCitation": "34%",
+      "period": "monthly",
+      "lastUpdated": "2026-04-08"
+    }
+  },
+  {
     "id": "ps-001",
     "type": "persona",
     "label": "Power Creator",
@@ -292,6 +407,23 @@
       "primaryNeed": "networking",
       "analyticsInterest": "low",
       "churnRisk": "low"
+    }
+  },
+  {
+    "id": "ps-003",
+    "type": "persona",
+    "label": "Newsletter Subscriber",
+    "description": "Reader who follows and pays for creator newsletters. Typically a professional who values curated expert content. Key persona for Newsletter Monetization — their willingness to pay determines creator revenue potential.",
+    "source": "User Research",
+    "sourceItemId": "kb-002",
+    "timestamp": "2026-02-15T10:00:00Z",
+    "confidence": 0.83,
+    "metadata": {
+      "segment": "professional_reader",
+      "avgPaidSubscriptions": 2.4,
+      "willingnessToPay": "$8-15/month",
+      "retentionRate": "74% annual",
+      "primaryValue": "expert_curation"
     }
   },
   {
@@ -343,6 +475,23 @@
       "primaryFormat": "video",
       "audienceOverlap": "low",
       "threat_level": "low"
+    }
+  },
+  {
+    "id": "cp-004",
+    "type": "competitor",
+    "label": "Ghost.org",
+    "description": "Open-source publishing platform with strong native monetization (memberships, paid tiers). Growing adoption among professional writers migrating from Substack. Offers clean analytics + Stripe-native payouts.",
+    "source": "Competitive Analysis",
+    "sourceItemId": "kb-003",
+    "timestamp": "2026-03-25T09:00:00Z",
+    "confidence": 0.81,
+    "metadata": {
+      "ARR": "$9M (est)",
+      "keyStrength": "native_monetization",
+      "targetSegment": "professional_writers",
+      "threat_level": "medium",
+      "migrationFrom": "Substack"
     }
   },
   {
@@ -416,6 +565,23 @@
     }
   },
   {
+    "id": "ep-005",
+    "type": "epic",
+    "label": "Epic: Creator Growth Acceleration",
+    "description": "Cross-functional H2 initiative targeting Follower Growth Rate recovery for Power Creators. Combines analytics visibility, content recommendations, and network amplification to reverse 8% YoY FGR decline.",
+    "source": "Jira",
+    "sourceItemId": "kb-004",
+    "timestamp": "2026-04-05T09:00:00Z",
+    "confidence": 0.76,
+    "metadata": {
+      "jiraKey": "CREATOR-155",
+      "status": "scoping",
+      "sprint": "H2 2026",
+      "storyPoints": 0,
+      "assignedTeam": "Creator Platform + Growth"
+    }
+  },
+  {
     "id": "nt-001",
     "type": "note",
     "label": "Exec note: Q3 must show revenue signal",
@@ -463,6 +629,57 @@
       "change": "-8% YoY",
       "hypothesis": "analytics_gap_driving_churn",
       "confidence_in_correlation": 0.72
+    }
+  },
+  {
+    "id": "nt-004",
+    "type": "note",
+    "label": "Legal memo: payment processing classification issue",
+    "description": "Legal team memo (Dec 10): Stripe cannot support Creator Fund model in 7 markets due to regulatory classification of creator fund payments as 'employment income' rather than 'platform incentive.' Blocks entire Creator Fund design.",
+    "source": "Legal Memo",
+    "sourceItemId": "kb-007",
+    "timestamp": "2025-12-10T10:00:00Z",
+    "confidence": 0.98,
+    "metadata": {
+      "author": "Legal Team",
+      "blockedMarkets": 7,
+      "classification": "employment_income",
+      "processor": "Stripe",
+      "resolution": "pending_counsel"
+    }
+  },
+  {
+    "id": "nt-005",
+    "type": "note",
+    "label": "Growth report: Power Creator cohort analysis Q1 2026",
+    "description": "Growth team Q1 cohort analysis: Power Creators who posted 5+ times/week retained at 91%. Those who posted 1-2 times/week retained at 67%. Conclusion: creation frequency is the strongest retention predictor, and analytics visibility is its primary enabler.",
+    "source": "Internal Report",
+    "sourceItemId": "kb-005",
+    "timestamp": "2026-04-03T10:00:00Z",
+    "confidence": 0.88,
+    "metadata": {
+      "highFrequencyRetention": "91%",
+      "lowFrequencyRetention": "67%",
+      "primaryRetentionDriver": "creation_frequency",
+      "analyticsLink": "indirect",
+      "quarter": "Q1 2026"
+    }
+  },
+  {
+    "id": "nt-006",
+    "type": "note",
+    "label": "Engineering spike: analytics data pipeline availability",
+    "description": "Engineering spike confirmed: all required analytics data (impressions, reach, engagement, follower delta) is already computed in the data warehouse and available via internal API. Zero pipeline work needed — analytics is a pure frontend build.",
+    "source": "Engineering",
+    "sourceItemId": "kb-004",
+    "timestamp": "2026-03-10T11:00:00Z",
+    "confidence": 0.99,
+    "metadata": {
+      "dataAvailable": true,
+      "pipelineWork": "none",
+      "frontendOnly": true,
+      "apiReadiness": "ready",
+      "estimatedSavedWeeks": 2
     }
   }
 ]
