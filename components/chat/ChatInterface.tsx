@@ -4,7 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Paperclip, Mic, Monitor, ArrowUp, Square, FileText, X, ChevronRight, Map } from 'lucide-react';
 import { getChatSessionById } from '@/lib/data';
 import { useStore } from '@/lib/store';
-import type { ChatSession, ChatMessage, DecisionTraceNode } from '@/lib/types';
+import { DecisionTrace } from '@/components/chat/DecisionTrace';
+import type { ChatSession, ChatMessage } from '@/lib/types';
 
 export interface ChatInterfaceProps {
   session?: ChatSession;
@@ -12,16 +13,6 @@ export interface ChatInterfaceProps {
   sessionTitle?: string;
 }
 
-const NODE_COLORS: Record<string, string> = {
-  feedback: 'bg-purple-500',
-  decision: 'bg-blue-600',
-  feature: 'bg-green-500',
-  metric: 'bg-orange-500',
-  persona: 'bg-pink-500',
-  competitor: 'bg-red-500',
-  epic: 'bg-indigo-500',
-  note: 'bg-yellow-400',
-};
 
 function matchSession(query: string): ChatMessage | null {
   const lower = query.toLowerCase();
@@ -62,49 +53,6 @@ function LPMBanner() {
   );
 }
 
-function DecisionTraceViz({ nodes }: { nodes: DecisionTraceNode[] }) {
-  const [selectedNode, setSelectedNode] = useState<DecisionTraceNode | null>(null);
-
-  return (
-    <div className="my-4 border border-gray-200 rounded-xl overflow-hidden">
-      <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
-        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Decision Trace</p>
-      </div>
-      <div className="p-4 flex flex-wrap gap-2">
-        {nodes.map((node) => (
-          <button
-            key={node.id}
-            onClick={() => setSelectedNode(selectedNode?.id === node.id ? null : node)}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-xs font-medium transition-all ${
-              selectedNode?.id === node.id
-                ? 'border-[#4F3DD5] bg-indigo-50 text-[#4F3DD5]'
-                : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
-            }`}
-          >
-            <div className={`h-2 w-2 rounded-full shrink-0 ${NODE_COLORS[node.type] ?? 'bg-gray-400'}`} />
-            {node.label}
-          </button>
-        ))}
-      </div>
-      {selectedNode && (
-        <div className="px-4 pb-4 border-t border-gray-100 pt-3">
-          <div className="flex items-center gap-2 mb-1">
-            <div className={`h-2 w-2 rounded-full ${NODE_COLORS[selectedNode.type] ?? 'bg-gray-400'}`} />
-            <p className="text-xs font-semibold text-gray-900">{selectedNode.label}</p>
-            <span className="text-xs text-gray-400">· {selectedNode.source}</span>
-          </div>
-          <p className="text-xs text-gray-600 leading-relaxed">{selectedNode.detail}</p>
-          <div className="flex items-center gap-1 mt-2">
-            <div className="h-1 rounded-full bg-gray-200 flex-1">
-              <div className="h-1 rounded-full bg-[#4F3DD5]" style={{ width: `${selectedNode.confidence * 100}%` }} />
-            </div>
-            <span className="text-xs text-gray-400">{Math.round(selectedNode.confidence * 100)}% confidence</span>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
 
 function MsgBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === 'user';
@@ -152,7 +100,7 @@ function MsgBubble({ message }: { message: ChatMessage }) {
         })}
       </div>
 
-      {message.decisionTrace && <DecisionTraceViz nodes={message.decisionTrace.nodes} />}
+      {message.decisionTrace && <DecisionTrace trace={message.decisionTrace} />}
 
       {message.role === 'mira' && message.content.includes('artifact') && (
         <>
