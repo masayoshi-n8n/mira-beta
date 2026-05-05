@@ -17,20 +17,20 @@ export default function ProductMapPage() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem)]">
-      {/* Header — dark to blend into the graph */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-[#1a2235] bg-[#080b10] shrink-0">
+      {/* Header — light theme */}
+      <div className="flex items-center justify-between px-6 py-3 border-b border-gray-100 bg-white shrink-0">
         <div>
-          <h1 className="text-sm font-semibold text-slate-200">Product Map</h1>
-          <p className="text-xs text-slate-500 mt-0.5 font-mono">
+          <h1 className="text-sm font-semibold text-gray-900">Product Map</h1>
+          <p className="text-xs text-gray-400 mt-0.5">
             {nodes.length} nodes · {edges.length} connections · 60 days of context
             {highlightedNodeIds && (
-              <span className="ml-2 text-indigo-400 font-medium">
+              <span className="ml-2 text-[#4F3DD5] font-medium">
                 · {highlightedNodeIds.length} highlighted
               </span>
             )}
           </p>
         </div>
-        <div className="flex items-center gap-2 text-xs text-slate-500">
+        <div className="flex items-center gap-2 text-xs text-gray-400">
           <span className="flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             Live

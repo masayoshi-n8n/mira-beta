@@ -1,26 +1,32 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import { useMemo, useState } from 'react';
-import { buildSigmaGraph } from '@/lib/sigma-utils';
-import { GraphControls } from './GraphControls';
-import type { LPMNode, LPMEdge, NodeType } from '@/lib/types';
-import type { SigmaGraphProps } from './SigmaGraph';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import ReactFlow, {
+  Background,
+  BackgroundVariant,
+  ReactFlowProvider,
+  useReactFlow,
+  type NodeTypes,
+} from 'reactflow';
+import 'reactflow/dist/style.css';
+import { ArrowLeft } from 'lucide-react';
 
-const SigmaGraph = dynamic<SigmaGraphProps>(
-  () => import('./SigmaGraph').then((m) => ({ default: m.SigmaGraph })),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex h-full w-full items-center justify-center bg-[#080b10]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-7 w-7 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
-          <p className="text-xs text-slate-500">Initialising graph…</p>
-        </div>
-      </div>
-    ),
-  }
-);
+import { GroupCardNode } from './GroupCard';
+import { LpmNodeCard } from './LpmNode';
+import {
+  buildGroupNodes,
+  buildGroupEdges,
+  buildGroupDetailNodes,
+  buildGroupDetailEdges,
+  THEME_GROUP_CONFIG,
+} from '@/lib/graph-utils';
+import type { LPMNode, LPMEdge, ThemeGroupKey } from '@/lib/types';
+
+// Defined outside component — prevents ReactFlow from remounting custom nodes on every render
+const NODE_TYPES: NodeTypes = {
+  groupCard: GroupCardNode,
+  lpmNode: LpmNodeCard,
+};
 
 interface LPMGraphProps {
   nodes: LPMNode[];
@@ -30,58 +36,172 @@ interface LPMGraphProps {
   externalHighlightIds?: string[] | null;
 }
 
-export function LPMGraph({ nodes, edges, selectedNodeId: controlledId, onNodeSelect, externalHighlightIds }: LPMGraphProps) {
-  const [internalId,       setInternalId]       = useState<string | null>(null);
-  const [controlsCollapsed, setControlsCollapsed] = useState(false);
-  const [searchQuery,       setSearchQuery]       = useState('');
-  const [activeFilters,     setActiveFilters]     = useState<NodeType[]>([]);
-  const [depth,             setDepth]             = useState(0);
+function LPMGraphInner({
+  nodes,
+  edges,
+  selectedNodeId: controlledId,
+  onNodeSelect,
+  externalHighlightIds,
+}: LPMGraphProps) {
+  const [activeGroup, setActiveGroup] = useState<ThemeGroupKey | null>(null);
+  const [internalId, setInternalId] = useState<string | null>(null);
+  const [hoveredGroup, setHoveredGroup] = useState<ThemeGroupKey | null>(null);
+  const { fitView } = useReactFlow();
 
   const selectedNodeId = controlledId !== undefined ? controlledId : internalId;
-  const graph          = useMemo(() => buildSigmaGraph(nodes, edges), [nodes, edges]);
 
-  function handleNodeClick(id: string) {
-    const newId = selectedNodeId === id ? null : id;
-    onNodeSelect ? onNodeSelect(newId) : setInternalId(newId);
-  }
+  const handleNodeSelect = useCallback(
+    (id: string) => {
+      const next = selectedNodeId === id ? null : id;
+      onNodeSelect ? onNodeSelect(next) : setInternalId(next);
+    },
+    [selectedNodeId, onNodeSelect],
+  );
 
-  function handleStageClick() {
-    onNodeSelect ? onNodeSelect(null) : setInternalId(null);
-  }
+  const handleDrillDown = useCallback(
+    (groupKey: ThemeGroupKey) => {
+      setActiveGroup(groupKey);
+      onNodeSelect?.(null);
+      setInternalId(null);
+    },
+    [onNodeSelect],
+  );
+
+  const handleBack = useCallback(() => {
+    setActiveGroup(null);
+    onNodeSelect?.(null);
+    setInternalId(null);
+  }, [onNodeSelect]);
+
+  const handleHover = useCallback((k: ThemeGroupKey | null) => {
+    setHoveredGroup(k);
+  }, []);
+
+  // Fit view whenever the active group changes
+  useEffect(() => {
+    const t = setTimeout(() => fitView({ padding: 0.15, duration: 500 }), 60);
+    return () => clearTimeout(t);
+  }, [activeGroup, fitView]);
+
+  // ── Overview nodes/edges ───────────────────────────────────────────────────
+  const overviewNodes = useMemo(
+    () =>
+      buildGroupNodes(nodes).map((n) => ({
+        ...n,
+        data: {
+          ...n.data,
+          dimmed: hoveredGroup !== null && hoveredGroup !== n.data.groupKey,
+          onDrillDown: handleDrillDown,
+          onHover: handleHover,
+        },
+      })),
+    [nodes, hoveredGroup, handleDrillDown, handleHover],
+  );
+
+  const overviewEdges = useMemo(() => buildGroupEdges(), []);
+
+  // ── Detail nodes/edges ─────────────────────────────────────────────────────
+  const detailNodes = useMemo(() => {
+    if (!activeGroup) return [];
+    return buildGroupDetailNodes(nodes, activeGroup).map((n) => ({
+      ...n,
+      data: {
+        ...n.data,
+        dimmed: externalHighlightIds ? !externalHighlightIds.includes(n.id) : false,
+        onSelect: handleNodeSelect,
+      },
+    }));
+  }, [nodes, activeGroup, externalHighlightIds, handleNodeSelect]);
+
+  const detailEdges = useMemo(() => {
+    if (!activeGroup) return [];
+    return buildGroupDetailEdges(edges, nodes, activeGroup);
+  }, [edges, nodes, activeGroup]);
+
+  // ── Active config ──────────────────────────────────────────────────────────
+  const activeGroupConfig = useMemo(
+    () => (activeGroup ? THEME_GROUP_CONFIG.find((c) => c.key === activeGroup) : null),
+    [activeGroup],
+  );
+
+  const flowNodes = activeGroup ? detailNodes : overviewNodes;
+  const flowEdges = activeGroup ? detailEdges : overviewEdges;
 
   return (
-    <div className="relative h-full w-full bg-[#080b10]">
-      <div className="absolute inset-0">
-        <SigmaGraph
-          graph={graph}
-          selectedId={selectedNodeId ?? null}
-          onNodeClick={handleNodeClick}
-          onStageClick={handleStageClick}
-          searchQuery={searchQuery}
-          activeFilters={activeFilters}
-          depth={depth}
-          externalHighlightIds={externalHighlightIds}
-        />
-      </div>
+    <div className="relative h-full w-full">
+      <ReactFlow
+        nodes={flowNodes}
+        edges={flowEdges}
+        nodeTypes={NODE_TYPES}
+        fitView
+        fitViewOptions={{ padding: 0.15 }}
+        minZoom={0.1}
+        maxZoom={2}
+        proOptions={{ hideAttribution: true }}
+        nodesDraggable={false}
+        nodesConnectable={false}
+        elementsSelectable={false}
+        className="bg-gray-50"
+      >
+        <Background color="#e2e8f0" gap={28} size={1} variant={BackgroundVariant.Dots} />
+      </ReactFlow>
 
-      {/* Controls — top left */}
-      <div className="absolute left-4 top-4 z-10">
-        <GraphControls
-          collapsed={controlsCollapsed}
-          depth={depth}
-          onToggleCollapse={() => setControlsCollapsed((c) => !c)}
-          onSearch={setSearchQuery}
-          onFilter={setActiveFilters}
-          onDepthChange={setDepth}
-        />
-      </div>
+      {/* Back button — shown in detail view */}
+      {activeGroup && (
+        <div className="absolute top-4 left-4 z-10 flex items-center gap-2.5">
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-colors"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            All Groups
+          </button>
+          {activeGroupConfig && (
+            <div
+              className="flex items-center gap-2 rounded-xl border bg-white px-3 py-2 shadow-sm"
+              style={{ borderColor: `${activeGroupConfig.color}40` }}
+            >
+              <div
+                className="h-2 w-2 rounded-full shrink-0"
+                style={{ background: activeGroupConfig.color }}
+              />
+              <span className="text-xs font-semibold text-gray-800">{activeGroupConfig.label}</span>
+              <span className="text-[10px] text-gray-400">
+                {detailNodes.length} nodes
+              </span>
+            </div>
+          )}
+        </div>
+      )}
 
-      {/* Stats pill — bottom left */}
+      {/* Overview hint */}
+      {!activeGroup && (
+        <div className="absolute top-4 left-4 z-10">
+          <div className="rounded-xl border border-gray-200 bg-white px-3 py-2 shadow-sm">
+            <p className="text-[11px] text-gray-500">
+              <span className="font-semibold text-gray-700">8 theme groups</span>
+              {' · '}Click any group to explore
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Stats pill */}
       <div className="absolute bottom-4 left-4 z-10">
-        <div className="rounded-full border border-white/10 bg-[#0f1623]/80 backdrop-blur-sm px-3 py-1 text-[10px] text-slate-500 font-mono">
-          {nodes.length} nodes · {edges.length} edges
+        <div className="rounded-full border border-gray-200 bg-white/90 backdrop-blur-sm px-3 py-1.5 text-[10px] text-gray-500 shadow-sm font-mono">
+          {activeGroup
+            ? `${detailNodes.length} nodes · ${detailEdges.length} edges`
+            : `${nodes.length} nodes · ${edges.length} edges · 60 days context`}
         </div>
       </div>
     </div>
+  );
+}
+
+export function LPMGraph(props: LPMGraphProps) {
+  return (
+    <ReactFlowProvider>
+      <LPMGraphInner {...props} />
+    </ReactFlowProvider>
   );
 }

@@ -1,3 +1,21 @@
+export type ThemeGroupKey =
+  | 'pmf'
+  | 'satisfaction'
+  | 'revenue'
+  | 'retention'
+  | 'competitive'
+  | 'compliance'
+  | 'performance'
+  | 'roadmap';
+
+export interface ThemeGroupConfig {
+  key: ThemeGroupKey;
+  label: string;
+  description: string;
+  color: string;
+  position: { x: number; y: number };
+}
+
 export type NodeType =
   | 'feedback'
   | 'decision'
@@ -29,6 +47,7 @@ export interface LPMNode {
   timestamp: string;
   confidence: number;
   projectId?: string;
+  themeGroup?: ThemeGroupKey;
   metadata: Record<string, string | number | boolean>;
 }
 

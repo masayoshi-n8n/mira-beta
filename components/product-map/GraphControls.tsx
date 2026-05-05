@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Search, SlidersHorizontal, ChevronLeft } from 'lucide-react';
-import { NODE_COLOR_MAP_EXPORT } from '@/lib/sigma-utils';
+import { NODE_TYPE_COLORS } from '@/lib/graph-utils';
 import type { NodeType } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
@@ -123,7 +123,7 @@ export function GraphControls({
         <div className="flex flex-col gap-0.5">
           {NODE_TYPES.map((type) => {
             const active = activeFilters.has(type);
-            const color  = NODE_COLOR_MAP_EXPORT[type];
+            const color  = NODE_TYPE_COLORS[type];
             return (
               <button
                 key={type}

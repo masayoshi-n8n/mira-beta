@@ -421,5 +421,365 @@
     "confidence": 0.77,
     "inferredSource": "TikTok Creator tools scheduling features created competitive pressure on Post Scheduling v2",
     "timestamp": "2026-04-02T09:00:00Z"
+  },
+  {
+    "id": "e-048",
+    "source": "ps-004",
+    "target": "dc-006",
+    "type": "influenced",
+    "confidence": 0.84,
+    "inferredSource": "Growth-stage creator analytics adoption rate was key signal in PMF assessment",
+    "timestamp": "2026-04-04T10:00:00Z"
+  },
+  {
+    "id": "e-049",
+    "source": "ps-006",
+    "target": "ft-007",
+    "type": "influenced",
+    "confidence": 0.81,
+    "inferredSource": "Emerging creator early churn pattern directly motivated onboarding flow redesign",
+    "timestamp": "2026-04-10T09:00:00Z"
+  },
+  {
+    "id": "e-050",
+    "source": "nt-007",
+    "target": "dc-006",
+    "type": "caused",
+    "confidence": 0.91,
+    "inferredSource": "Q1 research synthesis across NPS, interviews, and behavioral data triggered formal PMF assessment",
+    "timestamp": "2026-04-05T10:00:00Z"
+  },
+  {
+    "id": "e-051",
+    "source": "ps-005",
+    "target": "ft-005",
+    "type": "relates_to",
+    "confidence": 0.79,
+    "inferredSource": "Enterprise thought leader persona requires delegation-friendly benchmarking reports",
+    "timestamp": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "e-052",
+    "source": "ft-007",
+    "target": "ep-006",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy: onboarding redesign under Creator UX Refresh epic",
+    "timestamp": "2026-04-10T09:00:00Z"
+  },
+  {
+    "id": "e-053",
+    "source": "fb-008",
+    "target": "ft-009",
+    "type": "caused",
+    "confidence": 0.86,
+    "inferredSource": "Heatmap study showing 61% never scroll below fold directly caused dashboard homepage redesign",
+    "timestamp": "2026-04-11T09:00:00Z"
+  },
+  {
+    "id": "e-054",
+    "source": "fb-010",
+    "target": "ft-008",
+    "type": "influenced",
+    "confidence": 0.77,
+    "inferredSource": "Creator notification fatigue signal from interviews influenced notification center feature scope",
+    "timestamp": "2026-04-08T09:00:00Z"
+  },
+  {
+    "id": "e-055",
+    "source": "mt-006",
+    "target": "dc-007",
+    "type": "influenced",
+    "confidence": 0.83,
+    "inferredSource": "Low creator session duration (4.2 min) was key signal in onboarding redesign decision",
+    "timestamp": "2026-04-09T14:00:00Z"
+  },
+  {
+    "id": "e-056",
+    "source": "mt-008",
+    "target": "dc-007",
+    "type": "influenced",
+    "confidence": 0.86,
+    "inferredSource": "Creator NPS of 34 (vs 48 platform average) provided quantitative justification for UX redesign",
+    "timestamp": "2026-04-09T14:00:00Z"
+  },
+  {
+    "id": "e-057",
+    "source": "nt-008",
+    "target": "ft-009",
+    "type": "influenced",
+    "confidence": 0.85,
+    "inferredSource": "UX audit on analytics empty state confusing creators influenced creator hub homepage redesign scope",
+    "timestamp": "2026-04-11T09:00:00Z"
+  },
+  {
+    "id": "e-058",
+    "source": "nt-009",
+    "target": "dc-008",
+    "type": "influenced",
+    "confidence": 0.93,
+    "inferredSource": "Finance model projecting $2.4M ARR informed the 3-tier pricing structure decision",
+    "timestamp": "2026-04-08T11:00:00Z"
+  },
+  {
+    "id": "e-059",
+    "source": "mt-009",
+    "target": "ep-003",
+    "type": "relates_to",
+    "confidence": 0.96,
+    "inferredSource": "Monthly recurring revenue from creators is the primary success metric for newsletter monetization epic",
+    "timestamp": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "e-060",
+    "source": "ft-010",
+    "target": "ep-003",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy: subscription tier management under newsletter monetization epic",
+    "timestamp": "2026-03-15T09:00:00Z"
+  },
+  {
+    "id": "e-061",
+    "source": "ft-011",
+    "target": "ep-003",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy: creator payout dashboard under newsletter monetization epic",
+    "timestamp": "2026-03-20T09:00:00Z"
+  },
+  {
+    "id": "e-062",
+    "source": "mt-010",
+    "target": "dc-008",
+    "type": "influenced",
+    "confidence": 0.90,
+    "inferredSource": "Substack ARPS benchmark ($9.40) anchored LinkedIn's conservative $6 target and tier pricing decision",
+    "timestamp": "2026-04-08T11:00:00Z"
+  },
+  {
+    "id": "e-063",
+    "source": "ps-007",
+    "target": "dc-009",
+    "type": "influenced",
+    "confidence": 0.87,
+    "inferredSource": "At-risk creator segment (72% churn probability) informed the 50K+ creator retention intervention target",
+    "timestamp": "2026-04-06T15:00:00Z"
+  },
+  {
+    "id": "e-064",
+    "source": "nt-010",
+    "target": "dc-009",
+    "type": "caused",
+    "confidence": 0.87,
+    "inferredSource": "Cohort analysis showing posting cadence predicts 90-day retention drove the retention strategy decision",
+    "timestamp": "2026-04-06T15:00:00Z"
+  },
+  {
+    "id": "e-065",
+    "source": "mt-011",
+    "target": "ep-005",
+    "type": "relates_to",
+    "confidence": 0.94,
+    "inferredSource": "30-day creator retention rate is the primary OKR metric for creator growth acceleration epic",
+    "timestamp": "2026-04-05T09:00:00Z"
+  },
+  {
+    "id": "e-066",
+    "source": "ft-012",
+    "target": "ep-005",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy: re-engagement email sequence under creator growth acceleration epic",
+    "timestamp": "2026-04-05T09:00:00Z"
+  },
+  {
+    "id": "e-067",
+    "source": "ft-013",
+    "target": "ep-005",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy: creator win-back campaign under creator growth acceleration epic",
+    "timestamp": "2026-04-07T09:00:00Z"
+  },
+  {
+    "id": "e-068",
+    "source": "nt-011",
+    "target": "dc-010",
+    "type": "caused",
+    "confidence": 0.84,
+    "inferredSource": "Intelligence on Beehiiv's LinkedIn migration program (340 creators) triggered competitive response decision",
+    "timestamp": "2026-04-07T09:00:00Z"
+  },
+  {
+    "id": "e-069",
+    "source": "cp-002",
+    "target": "ft-014",
+    "type": "influenced",
+    "confidence": 0.76,
+    "inferredSource": "Beehiiv's advanced analytics suite (cohort retention, referral tracking) set the benchmark for parity tracker",
+    "timestamp": "2026-04-01T09:00:00Z"
+  },
+  {
+    "id": "e-070",
+    "source": "cp-005",
+    "target": "mt-012",
+    "type": "relates_to",
+    "confidence": 0.68,
+    "inferredSource": "Medium's 700K active writers are a data point in estimating LinkedIn's creator platform market share",
+    "timestamp": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "e-071",
+    "source": "cp-006",
+    "target": "dc-010",
+    "type": "relates_to",
+    "confidence": 0.78,
+    "inferredSource": "X revenue sharing model contextualizes the competitive landscape for LinkedIn's monetization response",
+    "timestamp": "2026-04-07T09:00:00Z"
+  },
+  {
+    "id": "e-072",
+    "source": "nt-012",
+    "target": "dc-011",
+    "type": "influenced",
+    "confidence": 0.92,
+    "inferredSource": "DACH market payment classification findings shaped the GDPR compliance gate scope and timeline",
+    "timestamp": "2026-03-22T10:00:00Z"
+  },
+  {
+    "id": "e-073",
+    "source": "ft-015",
+    "target": "ep-004",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy: creator identity verification under creator fund beta epic",
+    "timestamp": "2026-03-25T09:00:00Z"
+  },
+  {
+    "id": "e-074",
+    "source": "ps-008",
+    "target": "ft-015",
+    "type": "relates_to",
+    "confidence": 0.76,
+    "inferredSource": "Enterprise creator persona GDPR and brand safety requirements define the identity verification compliance scope",
+    "timestamp": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "e-075",
+    "source": "mt-013",
+    "target": "ft-015",
+    "type": "relates_to",
+    "confidence": 0.88,
+    "inferredSource": "Trust & safety escalation rate (8.3%) is the target metric that identity verification is designed to reduce",
+    "timestamp": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "e-076",
+    "source": "nt-013",
+    "target": "dc-012",
+    "type": "caused",
+    "confidence": 0.90,
+    "inferredSource": "Three Q1 P0 incidents (4.2h total downtime) directly triggered the 99.9% SLA commitment decision",
+    "timestamp": "2026-04-01T09:00:00Z"
+  },
+  {
+    "id": "e-077",
+    "source": "ft-016",
+    "target": "ep-008",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy: analytics pipeline optimization under platform reliability Q3 epic",
+    "timestamp": "2026-04-02T09:00:00Z"
+  },
+  {
+    "id": "e-078",
+    "source": "ft-017",
+    "target": "ep-008",
+    "type": "is_child_of",
+    "confidence": 0.99,
+    "inferredSource": "Jira epic-feature hierarchy: CDN cache strategy under platform reliability Q3 epic",
+    "timestamp": "2026-04-04T09:00:00Z"
+  },
+  {
+    "id": "e-079",
+    "source": "ps-009",
+    "target": "mt-016",
+    "type": "relates_to",
+    "confidence": 0.82,
+    "inferredSource": "High-volume creator persona (200+ posts/month) is the primary driver of mobile crash rate metric",
+    "timestamp": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "e-080",
+    "source": "nt-015",
+    "target": "dc-013",
+    "type": "influenced",
+    "confidence": 0.88,
+    "inferredSource": "Q3 engineering capacity confirmation (14 engineers) enabled the 60/40 sprint allocation decision",
+    "timestamp": "2026-04-11T15:00:00Z"
+  },
+  {
+    "id": "e-081",
+    "source": "nt-016",
+    "target": "dc-014",
+    "type": "caused",
+    "confidence": 0.87,
+    "inferredSource": "PM scope alignment sync documenting v1 inclusions directly caused analytics scope lock decision",
+    "timestamp": "2026-04-14T14:00:00Z"
+  },
+  {
+    "id": "e-082",
+    "source": "ep-009",
+    "target": "ep-001",
+    "type": "relates_to",
+    "confidence": 0.79,
+    "inferredSource": "Q3 creator acquisition sprint uses analytics dashboard launch as primary activation hook",
+    "timestamp": "2026-04-10T09:00:00Z"
+  },
+  {
+    "id": "e-083",
+    "source": "fb-011",
+    "target": "dc-013",
+    "type": "influenced",
+    "confidence": 0.88,
+    "inferredSource": "Product advisory council consensus on analytics-first approach validated the 60/40 sprint allocation",
+    "timestamp": "2026-04-12T14:00:00Z"
+  },
+  {
+    "id": "e-084",
+    "source": "dc-006",
+    "target": "ep-001",
+    "type": "influenced",
+    "confidence": 0.84,
+    "inferredSource": "Formal PMF designation in analytics segment elevated Creator Analytics Dashboard to top Q3 priority",
+    "timestamp": "2026-04-05T10:00:00Z"
+  },
+  {
+    "id": "e-085",
+    "source": "mt-014",
+    "target": "ft-001",
+    "type": "relates_to",
+    "confidence": 0.88,
+    "inferredSource": "API P99 latency reduction to <200ms is a prerequisite for an acceptable creator analytics dashboard experience",
+    "timestamp": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "e-086",
+    "source": "dc-011",
+    "target": "ep-003",
+    "type": "influenced",
+    "confidence": 0.95,
+    "inferredSource": "GDPR compliance gate adding 3-week review cycles directly impacted newsletter monetization epic timeline",
+    "timestamp": "2026-03-15T10:00:00Z"
+  },
+  {
+    "id": "e-087",
+    "source": "nt-010",
+    "target": "ft-007",
+    "type": "influenced",
+    "confidence": 0.87,
+    "inferredSource": "Posting cadence cohort analysis (3+ posts in days 1-14 = 83% D90 retention) shaped onboarding flow redesign goals",
+    "timestamp": "2026-04-10T09:00:00Z"
   }
 ]
