@@ -2,17 +2,17 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, MessageSquare, Database, Layers, Store, Settings, Network, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Home, MessageSquare, Database, Layers, Workflow, Settings, Network, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useStore } from '@/lib/store';
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Home', icon: Home },
   { href: '/chat', label: 'Chat', icon: MessageSquare },
+  { href: '/projects', label: 'Projects', icon: Layers },
   { href: '/product-map', label: 'Product Map', icon: Network },
   { href: '/knowledge-base', label: 'Knowledge Base', icon: Database },
-  { href: '/projects', label: 'Projects', icon: Layers },
-  { href: '/marketplace', label: 'Marketplace', icon: Store },
+  { href: '/integrations', label: 'Integrations', icon: Workflow },
 ];
 
 const PI_ITEMS = ['Product Identity', 'Task Intent', 'Documents', 'Live Data'];
