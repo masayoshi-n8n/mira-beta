@@ -13,42 +13,52 @@ import ReactFlow, {
   type NodeTypes,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { MoreHorizontal, Sparkles, X } from 'lucide-react';
+import { ChevronUp, ChevronDown, X } from 'lucide-react';
 import type {
   DecisionTrace as DecisionTraceType,
   DecisionTraceNode,
   NodeType,
+  EdgeType,
 } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 // ── Category mapping ──────────────────────────────────────────────────────────
 
-type Category = 'signal' | 'decision' | 'goal' | 'epic';
+type Category = 'input' | 'confirmation' | 'output';
 
 const TYPE_TO_CAT: Record<NodeType, Category> = {
-  feedback:   'signal',
-  metric:     'signal',
-  competitor: 'signal',
-  note:       'signal',
-  decision:   'decision',
-  feature:    'epic',
-  epic:       'epic',
-  persona:    'goal',
+  feedback:   'input',
+  metric:     'input',
+  competitor: 'input',
+  note:       'input',
+  persona:    'confirmation',
+  decision:   'confirmation',
+  feature:    'output',
+  epic:       'output',
 };
 
-const CAT: Record<Category, { border: string; text: string; label: string }> = {
-  signal:   { border: '#3b82f6', text: '#2563eb', label: 'Signal' },
-  decision: { border: '#7c3aed', text: '#6d28d9', label: 'Decision' },
-  goal:     { border: '#22c55e', text: '#16a34a', label: 'Goal' },
-  epic:     { border: '#f59e0b', text: '#d97706', label: 'Epic' },
+const CAT_CFG: Record<Category, { bg: string; border: string; title: string; sub: string }> = {
+  input:        { bg: '#fff1f2', border: '#fca5a5', title: '#be123c', sub: '#9f1239' },
+  confirmation: { bg: '#eff6ff', border: '#93c5fd', title: '#1d4ed8', sub: '#1e40af' },
+  output:       { bg: '#eef2ff', border: '#a5b4fc', title: '#4338ca', sub: '#3730a3' },
+};
+
+const EDGE_LABEL: Partial<Record<EdgeType, string>> = {
+  caused:              'TRIGGERED',
+  contradicts:         'TRIGGERED',
+  preceded:            'TRIGGERED',
+  influenced:          'INFORMED',
+  relates_to:          'INFORMED',
+  is_child_of:         'INFORMED',
+  was_deprioritized_by:'INFORMED',
 };
 
 // ── Layout constants ──────────────────────────────────────────────────────────
 
-const NODE_W = 220;
-const NODE_H = 90;
-const COL_GAP = 80;
-const ROW_GAP = 18;
+const NODE_W = 195;
+const NODE_H = 76;
+const COL_GAP = 72;
+const ROW_GAP = 14;
 
 // ── Topological layout ────────────────────────────────────────────────────────
 
@@ -108,107 +118,47 @@ function computePositions(
   return pos;
 }
 
-// The "outcome" is the decision node most downstream — it's what Mira concluded.
-function findOutcomeId(
-  nodes: DecisionTraceNode[],
-  edges: DecisionTraceType['edges'],
-): string | null {
-  const decisionNodes = nodes.filter((n) => n.type === 'decision');
-  if (!decisionNodes.length) return null;
-  const inc: Record<string, number> = {};
-  for (const e of edges) inc[e.target] = (inc[e.target] ?? 0) + 1;
-  return decisionNodes.reduce((best, n) =>
-    (inc[n.id] ?? 0) > (inc[best.id] ?? 0) ? n : best,
-  ).id;
-}
-
 // ── Node card ─────────────────────────────────────────────────────────────────
 
 interface TraceNodeData {
   label: string;
+  detail: string;
   source: string;
-  timestamp: string;
   category: Category;
   isSelected: boolean;
-  isOutcome: boolean;
   onSelect: (node: DecisionTraceNode) => void;
   raw: DecisionTraceNode;
 }
 
 function TraceNode({ data }: NodeProps<TraceNodeData>) {
-  const cfg = CAT[data.category];
-  const date = new Date(data.timestamp).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-  });
+  const cfg = CAT_CFG[data.category];
 
   return (
-    <div className="relative" style={{ width: NODE_W }}>
-      {/* Outcome badge */}
-      {data.isOutcome && (
-        <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 rounded-lg bg-gray-900 px-3 py-1.5 text-[10px] font-medium text-white shadow-lg whitespace-nowrap">
-          <Sparkles className="h-2.5 w-2.5 text-purple-300" />
-          Mira&apos;s recommendation
-          <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-3 w-3 rotate-45 bg-gray-900" />
-        </div>
-      )}
-
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={{ opacity: 0, width: 6, height: 6 }}
-      />
+    <div style={{ width: NODE_W }}>
+      <Handle type="target" position={Position.Left} style={{ opacity: 0, width: 6, height: 6 }} />
 
       <div
         onClick={() => data.onSelect(data.raw)}
-        className="relative cursor-pointer overflow-hidden rounded-xl bg-white transition-all duration-150 hover:shadow-md"
+        className="cursor-pointer rounded-xl px-3 py-2.5 transition-all duration-150 hover:shadow-md"
         style={{
-          border: data.isSelected
-            ? `1.5px solid ${cfg.border}`
-            : '1.5px solid #e5e7eb',
+          background: cfg.bg,
+          border: `1.5px solid ${data.isSelected ? cfg.border : cfg.border + 'cc'}`,
           boxShadow: data.isSelected
-            ? `0 0 0 3px ${cfg.border}22, 0 4px 14px rgba(0,0,0,0.08)`
-            : '0 1px 3px rgba(0,0,0,0.06)',
+            ? `0 0 0 3px ${cfg.border}44, 0 2px 8px rgba(0,0,0,0.06)`
+            : '0 1px 3px rgba(0,0,0,0.05)',
           minHeight: NODE_H,
         }}
       >
-        {/* Left accent */}
-        <div
-          className="absolute inset-y-0 left-0 w-[3px]"
-          style={{ background: cfg.border }}
-        />
-
-        <div className="pl-4 pr-3 py-3">
-          <div className="flex items-start justify-between gap-2 mb-1">
-            <p
-              className="text-[12.5px] font-semibold leading-snug"
-              style={{ color: cfg.text }}
-            >
-              {data.label}
-            </p>
-            <button
-              className="mt-0.5 shrink-0 rounded p-0.5 text-gray-300 hover:bg-gray-100 hover:text-gray-500 transition-colors"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <MoreHorizontal className="h-3.5 w-3.5" />
-            </button>
-          </div>
-
-          <p className="text-[11px] text-gray-500 leading-snug line-clamp-2 mb-2">
-            {data.source}
-          </p>
-
-          <p className="text-[10px] text-gray-400 uppercase tracking-wide">
-            {cfg.label} · {date}
-          </p>
-        </div>
+        <p className="text-[12px] font-semibold leading-snug mb-1" style={{ color: cfg.title }}>
+          {data.label}
+        </p>
+        <p className="text-[11px] leading-snug mb-1.5" style={{ color: cfg.sub + 'cc' }}>
+          {data.detail}
+        </p>
+        <p className="text-[10px] text-gray-400 truncate font-mono">{data.source}</p>
       </div>
 
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={{ opacity: 0, width: 6, height: 6 }}
-      />
+      <Handle type="source" position={Position.Right} style={{ opacity: 0, width: 6, height: 6 }} />
     </div>
   );
 }
@@ -217,20 +167,12 @@ const NODE_TYPES: NodeTypes = { trace: TraceNode };
 
 // ── Detail panel ──────────────────────────────────────────────────────────────
 
-function DetailPanel({
-  node,
-  onClose,
-}: {
-  node: DecisionTraceNode;
-  onClose: () => void;
-}) {
+function DetailPanel({ node, onClose }: { node: DecisionTraceNode; onClose: () => void }) {
   const cat = TYPE_TO_CAT[node.type];
-  const cfg = CAT[cat];
+  const cfg = CAT_CFG[cat];
   const pct = Math.round(node.confidence * 100);
   const date = new Date(node.timestamp).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
+    month: 'short', day: 'numeric', year: 'numeric',
   });
   const confLabel =
     node.confidence >= 0.8 ? 'High confidence'
@@ -242,35 +184,22 @@ function DetailPanel({
     : 'text-red-700 bg-red-50';
 
   return (
-    <div className="border-t bg-white px-5 py-4">
+    <div className="border-t border-gray-100 bg-white px-5 py-4">
       <div className="flex items-start justify-between gap-3 mb-3">
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full shrink-0" style={{ background: cfg.border }} />
-          <span
-            className="text-[10px] font-bold uppercase tracking-widest"
-            style={{ color: cfg.text }}
-          >
-            {cfg.label}
-          </span>
-        </div>
-        <button
-          onClick={onClose}
-          className="rounded-md p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
-        >
+        <p className="text-[11px] font-bold uppercase tracking-widest" style={{ color: cfg.title }}>
+          {cat}
+        </p>
+        <button onClick={onClose} className="rounded-md p-1 text-gray-400 hover:bg-gray-100 transition-colors">
           <X className="h-4 w-4" />
         </button>
       </div>
-
-      <p className="text-[13px] font-semibold text-gray-900 mb-2">{node.label}</p>
+      <p className="text-[13px] font-semibold text-gray-900 mb-1.5">{node.label}</p>
       <p className="text-xs leading-relaxed text-gray-600 mb-4">{node.detail}</p>
-
       <div className="flex flex-wrap items-center gap-2">
         <span className={cn('rounded-full px-2.5 py-0.5 text-[10px] font-semibold', confCls)}>
           {pct}% · {confLabel}
         </span>
-        <span className="text-[10px] text-gray-400">
-          {node.source} · {date}
-        </span>
+        <span className="text-[10px] text-gray-400">{node.source} · {date}</span>
       </div>
     </div>
   );
@@ -284,20 +213,19 @@ interface DecisionTraceProps {
 
 export function DecisionTrace({ trace }: DecisionTraceProps) {
   const [selected, setSelected] = useState<DecisionTraceNode | null>(null);
+  const [expanded, setExpanded] = useState(true);
 
   const handleSelect = useCallback((node: DecisionTraceNode) => {
     setSelected((prev) => (prev?.id === node.id ? null : node));
   }, []);
 
-  const outcomeId = useMemo(
-    () => findOutcomeId(trace.nodes, trace.edges),
-    [trace.nodes, trace.edges],
-  );
-
   const positions = useMemo(
     () => computePositions(trace.nodes, trace.edges),
     [trace.nodes, trace.edges],
   );
+
+  const signalCount = trace.nodes.filter((n) => TYPE_TO_CAT[n.type] === 'input').length;
+  const decisionCount = trace.nodes.filter((n) => TYPE_TO_CAT[n.type] === 'confirmation').length;
 
   const flowNodes = useMemo<Node[]>(
     () =>
@@ -307,16 +235,15 @@ export function DecisionTrace({ trace }: DecisionTraceProps) {
         position: positions[n.id] ?? { x: 0, y: 0 },
         data: {
           label: n.label,
+          detail: n.detail,
           source: n.source,
-          timestamp: n.timestamp,
-          category: TYPE_TO_CAT[n.type] ?? 'signal',
+          category: TYPE_TO_CAT[n.type] ?? 'input',
           isSelected: selected?.id === n.id,
-          isOutcome: n.id === outcomeId,
           onSelect: handleSelect,
           raw: n,
         } as TraceNodeData,
       })),
-    [trace.nodes, positions, selected?.id, outcomeId, handleSelect],
+    [trace.nodes, positions, selected?.id, handleSelect],
   );
 
   const flowEdges = useMemo<Edge[]>(
@@ -327,13 +254,13 @@ export function DecisionTrace({ trace }: DecisionTraceProps) {
         target: e.target,
         type: 'smoothstep',
         animated: false,
-        style: { stroke: '#9ca3af', strokeWidth: 1.5 },
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          color: '#9ca3af',
-          width: 14,
-          height: 14,
-        },
+        label: EDGE_LABEL[e.label] ?? 'INFORMED',
+        labelStyle: { fontSize: 8, fontWeight: 700, fill: '#9ca3af', letterSpacing: '0.06em' },
+        labelBgStyle: { fill: '#ffffff', fillOpacity: 0.95 },
+        labelBgPadding: [4, 2] as [number, number],
+        labelBgBorderRadius: 3,
+        style: { stroke: '#d1d5db', strokeWidth: 1.5 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: '#d1d5db', width: 12, height: 12 },
       })),
     [trace.edges],
   );
@@ -341,60 +268,46 @@ export function DecisionTrace({ trace }: DecisionTraceProps) {
   return (
     <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 shadow-sm">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-2.5">
-        <div>
-          <p className="text-xs font-semibold text-gray-900">Decision Trace</p>
-          <p className="mt-0.5 text-[10px] text-gray-400">
-            {trace.nodes.length} nodes · {trace.edges.length} connections · click any node to inspect
+      <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50 px-4 py-2.5">
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-emerald-400" />
+          <p className="text-xs font-medium text-gray-700">
+            LPM updated — {signalCount} signal{signalCount !== 1 ? 's' : ''} and {decisionCount} decision{decisionCount !== 1 ? 's' : ''} added.
           </p>
         </div>
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          className="flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
+        >
+          View Map
+          {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+        </button>
       </div>
 
       {/* Canvas */}
-      <div className="relative" style={{ height: 380 }}>
-        <ReactFlow
-          nodes={flowNodes}
-          edges={flowEdges}
-          nodeTypes={NODE_TYPES}
-          fitView
-          fitViewOptions={{ padding: 0.28 }}
-          minZoom={0.25}
-          maxZoom={2}
-          proOptions={{ hideAttribution: true }}
-          nodesDraggable={false}
-          nodesConnectable={false}
-          elementsSelectable={false}
-          className="bg-[#f3f4f6]"
-        >
-          <Background
-            color="#d1d5db"
-            gap={24}
-            size={1}
-            variant={BackgroundVariant.Dots}
-          />
-        </ReactFlow>
-
-        {/* Legend */}
-        <div className="pointer-events-none absolute bottom-4 left-4 z-10 flex items-center gap-3 rounded-full border border-gray-200 bg-white/95 px-3.5 py-2 shadow-sm">
-          {(Object.entries(CAT) as [Category, (typeof CAT)[Category]][]).map(([key, cfg]) => (
-            <div key={key} className="flex items-center gap-1.5">
-              <div className="h-2.5 w-2.5 rounded-sm" style={{ background: cfg.border }} />
-              <span className="text-[10px] text-gray-500">{cfg.label}</span>
-            </div>
-          ))}
+      {expanded && (
+        <div className="relative bg-white" style={{ height: 340 }}>
+          <ReactFlow
+            nodes={flowNodes}
+            edges={flowEdges}
+            nodeTypes={NODE_TYPES}
+            fitView
+            fitViewOptions={{ padding: 0.22 }}
+            minZoom={0.2}
+            maxZoom={2}
+            proOptions={{ hideAttribution: true }}
+            nodesDraggable={false}
+            nodesConnectable={false}
+            elementsSelectable={false}
+            className="bg-white"
+          >
+            <Background color="#f3f4f6" gap={20} size={1} variant={BackgroundVariant.Dots} />
+          </ReactFlow>
         </div>
-
-        {/* Ask Mira */}
-        <div className="absolute bottom-4 right-4 z-10">
-          <button className="flex items-center gap-1.5 rounded-full border border-purple-200 bg-white px-3.5 py-1.5 text-[11px] font-medium text-purple-700 shadow-sm transition-all hover:border-purple-300 hover:shadow-md">
-            <Sparkles className="h-3 w-3" />
-            Ask Mira
-          </button>
-        </div>
-      </div>
+      )}
 
       {/* Detail panel */}
-      {selected && (
+      {selected && expanded && (
         <DetailPanel node={selected} onClose={() => setSelected(null)} />
       )}
     </div>
