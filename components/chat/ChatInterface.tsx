@@ -44,6 +44,17 @@ function matchSession(query: string): ChatMessage | null {
   return s.messages.find((m) => m.role === 'mira') ?? null;
 }
 
+function tokenize(content: string): string[] {
+  const tokens: string[] = [];
+  for (const part of content.split(/(\n)/)) {
+    if (part === '\n') { tokens.push('\n'); continue; }
+    part.split(' ').forEach((w, i, arr) => {
+      if (w) tokens.push(i < arr.length - 1 ? w + ' ' : w);
+    });
+  }
+  return tokens;
+}
+
 function ArtifactCard({
   artifact,
   onOpen,
@@ -78,10 +89,23 @@ function LPMBanner() {
 function MsgBubble({
   message,
   onOpenArtifact,
+  isStreaming = false,
+  isNew = false,
 }: {
   message: ChatMessage;
   onOpenArtifact: (a: Artifact) => void;
+  isStreaming?: boolean;
+  isNew?: boolean;
 }) {
+  const [showMeta, setShowMeta] = useState(!isNew);
+
+  useEffect(() => {
+    if (isNew) {
+      const t = setTimeout(() => setShowMeta(true), 150);
+      return () => clearTimeout(t);
+    }
+  }, [isNew]);
+
   const isUser = message.role === 'user';
 
   if (isUser) {
@@ -134,32 +158,39 @@ function MsgBubble({
           if (line === '') return <div key={i} className="h-2" />;
           return <p key={i} className="mb-1">{line}</p>;
         })}
+        {isStreaming && (
+          <span className="inline-block w-0.5 h-4 bg-gray-700 ml-0.5 animate-pulse align-middle" />
+        )}
       </div>
 
-      {message.artifacts && message.artifacts.length > 0 && (
-        <div className="mt-3">
-          {message.artifacts.map((artifact) => (
-            <ArtifactCard key={artifact.id} artifact={artifact} onOpen={onOpenArtifact} />
-          ))}
-        </div>
-      )}
+      {!isStreaming && (
+        <div className={`transition-opacity duration-500 ${showMeta ? 'opacity-100' : 'opacity-0'}`}>
+          {message.artifacts && message.artifacts.length > 0 && (
+            <div className="mt-3">
+              {message.artifacts.map((artifact) => (
+                <ArtifactCard key={artifact.id} artifact={artifact} onOpen={onOpenArtifact} />
+              ))}
+            </div>
+          )}
 
-      {message.decisionTrace && <DecisionTrace trace={message.decisionTrace} />}
+          {message.decisionTrace && <DecisionTrace trace={message.decisionTrace} />}
 
-      {message.role === 'mira' && !message.artifacts && message.content.includes('artifact') && (
-        <LPMBanner />
-      )}
+          {message.role === 'mira' && !message.artifacts && message.content.includes('artifact') && (
+            <LPMBanner />
+          )}
 
-      {message.provenance && message.provenance.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-1">
-          {message.provenance.map((p, i) => (
-            <span key={i} className="inline-flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-full px-2.5 py-1 text-xs text-gray-500">
-              <div className={`h-1.5 w-1.5 rounded-full shrink-0 ${
-                p.layer === 'knowledge-graph' ? 'bg-indigo-400' : p.layer === 'vector-db' ? 'bg-purple-400' : 'bg-green-400'
-              }`} />
-              {p.source}
-            </span>
-          ))}
+          {message.provenance && message.provenance.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-1">
+              {message.provenance.map((p, i) => (
+                <span key={i} className="inline-flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-full px-2.5 py-1 text-xs text-gray-500">
+                  <div className={`h-1.5 w-1.5 rounded-full shrink-0 ${
+                    p.layer === 'knowledge-graph' ? 'bg-indigo-400' : p.layer === 'vector-db' ? 'bg-purple-400' : 'bg-green-400'
+                  }`} />
+                  {p.source}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -199,8 +230,14 @@ export function ChatInterface({ session, initialMessages, sessionTitle }: ChatIn
   const [showProcessing, setShowProcessing] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState<string[]>([]);
   const [openArtifact, setOpenArtifact] = useState<Artifact | null>(null);
+  const [showTypingIndicator, setShowTypingIndicator] = useState(false);
+  const [streamingContent, setStreamingContent] = useState<string | null>(null);
+  const [newestMessageId, setNewestMessageId] = useState<string | null>(null);
+
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const streamIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const pendingMiraRef = useRef<ChatMessage | null>(null);
 
   const preloadedPrompt = useStore((s) => s.preloadedPrompt);
   const setPreloadedPrompt = useStore((s) => s.setPreloadedPrompt);
@@ -214,11 +251,74 @@ export function ChatInterface({ session, initialMessages, sessionTitle }: ChatIn
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, showProcessing]);
+  }, [messages, showProcessing, streamingContent, showTypingIndicator]);
+
+  useEffect(() => {
+    return () => {
+      if (streamIntervalRef.current) clearInterval(streamIntervalRef.current);
+    };
+  }, []);
+
+  function startStreaming(fullContent: string) {
+    const tokens = tokenize(fullContent);
+    let i = 0;
+    streamIntervalRef.current = setInterval(() => {
+      i += 4;
+      if (i >= tokens.length) {
+        clearInterval(streamIntervalRef.current!);
+        streamIntervalRef.current = null;
+        setStreamingContent(null);
+        commitMiraMessage();
+      } else {
+        setStreamingContent(tokens.slice(0, i).join(''));
+      }
+    }, 50);
+  }
+
+  function commitMiraMessage() {
+    const msg = pendingMiraRef.current;
+    if (!msg) return;
+    pendingMiraRef.current = null;
+    setMessages((prev) => [...prev, msg]);
+    setNewestMessageId(msg.id);
+    setIsGenerating(false);
+    setTimeout(() => setNewestMessageId(null), 600);
+  }
+
+  function handleStop() {
+    if (streamIntervalRef.current) {
+      clearInterval(streamIntervalRef.current);
+      streamIntervalRef.current = null;
+    }
+    setStreamingContent(null);
+    setShowTypingIndicator(false);
+    const msg = pendingMiraRef.current;
+    if (msg) {
+      pendingMiraRef.current = null;
+      setMessages((prev) => [...prev, msg]);
+      setIsGenerating(false);
+    }
+  }
+
+  function beginMiraResponse(query: string) {
+    const matched = matchSession(query);
+    const miraMsg: ChatMessage = matched
+      ? { ...matched, id: `m-${Date.now()}`, timestamp: new Date().toISOString() }
+      : {
+          id: `m-${Date.now()}`,
+          role: 'mira',
+          content: FALLBACK_RESPONSE,
+          timestamp: new Date().toISOString(),
+          confidence: 'inferred',
+        };
+    pendingMiraRef.current = miraMsg;
+    setStreamingContent('');
+    startStreaming(miraMsg.content);
+  }
 
   function handleSend() {
     if (!input.trim() && attachedFiles.length === 0) return;
-    if (isGenerating) { setIsGenerating(false); return; }
+    if (isGenerating) { handleStop(); return; }
 
     const userMsg: ChatMessage = {
       id: `msg-${Date.now()}`,
@@ -238,26 +338,15 @@ export function ChatInterface({ session, initialMessages, sessionTitle }: ChatIn
       setShowProcessing(true);
       setTimeout(() => {
         setShowProcessing(false);
-        addMiraResponse(query);
+        beginMiraResponse(query);
       }, 3000);
     } else {
-      setTimeout(() => addMiraResponse(query), 1500);
+      setShowTypingIndicator(true);
+      setTimeout(() => {
+        setShowTypingIndicator(false);
+        beginMiraResponse(query);
+      }, 400);
     }
-  }
-
-  function addMiraResponse(query: string) {
-    const matched = matchSession(query);
-    const miraMsg: ChatMessage = matched
-      ? { ...matched, id: `m-${Date.now()}`, timestamp: new Date().toISOString() }
-      : {
-          id: `m-${Date.now()}`,
-          role: 'mira',
-          content: FALLBACK_RESPONSE,
-          timestamp: new Date().toISOString(),
-          confidence: 'inferred',
-        };
-    setMessages((prev) => [...prev, miraMsg]);
-    setIsGenerating(false);
   }
 
   function handleFileAttach() { fileInputRef.current?.click(); }
@@ -292,18 +381,37 @@ export function ChatInterface({ session, initialMessages, sessionTitle }: ChatIn
 
         <div className="flex-1 overflow-y-auto px-10 py-8 max-w-3xl mx-auto w-full">
           {messages.map((msg) => (
-            <MsgBubble key={msg.id} message={msg} onOpenArtifact={setOpenArtifact} />
+            <MsgBubble
+              key={msg.id}
+              message={msg}
+              onOpenArtifact={setOpenArtifact}
+              isNew={msg.id === newestMessageId}
+            />
           ))}
 
           {showProcessing && (
             <ProcessingState files={attachedFiles.length > 0 ? attachedFiles : ['Amplitude_Funnel_WoW.csv', 'Gong_Transcripts_May.pdf', 'Sprint_Retro_Apr28.md']} />
           )}
 
-          {isGenerating && !showProcessing && (
-            <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
-              <div className="h-3.5 w-3.5 rounded-full border-2 border-gray-300 border-t-[#4F3DD5] animate-spin" />
-              Reading your situation — identifying the right structure.
+          {showTypingIndicator && (
+            <div className="flex items-center gap-1 mb-4">
+              <span className="h-2 w-2 rounded-full bg-gray-400 animate-bounce [animation-delay:0ms]" />
+              <span className="h-2 w-2 rounded-full bg-gray-400 animate-bounce [animation-delay:150ms]" />
+              <span className="h-2 w-2 rounded-full bg-gray-400 animate-bounce [animation-delay:300ms]" />
             </div>
+          )}
+
+          {streamingContent !== null && (
+            <MsgBubble
+              message={{
+                id: 'streaming',
+                role: 'mira',
+                content: streamingContent,
+                timestamp: new Date().toISOString(),
+              }}
+              onOpenArtifact={setOpenArtifact}
+              isStreaming={true}
+            />
           )}
 
           <div ref={bottomRef} />
@@ -333,7 +441,7 @@ export function ChatInterface({ session, initialMessages, sessionTitle }: ChatIn
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
                 }}
-                placeholder={messages.length > 1 ? 'Type your follow up...' : "Tell Mira what you're trying to figure out."}
+                placeholder={messages.length > 0 ? 'Type your follow up...' : "Tell Mira what you're trying to figure out."}
                 rows={3}
                 className="w-full resize-none outline-none text-sm text-gray-800 placeholder:text-gray-400 bg-transparent"
               />
