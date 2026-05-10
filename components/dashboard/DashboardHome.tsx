@@ -22,15 +22,17 @@ const MARKETPLACE_CARDS = [
     initials: 'CZ',
     bg: 'bg-blue-100',
     text: 'text-blue-700',
+    sessionLink: null,
   },
   {
-    name: 'Parth Shah',
+    name: 'Alex Chen',
     company: 'LinkedIn',
-    title: 'Metric drop to action plan',
+    title: 'KPI Signal to Action Plan',
     artifacts: ['Diagnostic Summary', 'Root Cause Assessment', 'Focused Bets'],
-    initials: 'PS',
+    initials: 'AC',
     bg: 'bg-orange-100',
     text: 'text-orange-700',
+    sessionLink: '/chat/cs-001',
   },
   {
     name: 'Ying Ge',
@@ -40,6 +42,7 @@ const MARKETPLACE_CARDS = [
     initials: 'YG',
     bg: 'bg-pink-100',
     text: 'text-pink-700',
+    sessionLink: null,
   },
 ];
 
@@ -152,7 +155,8 @@ export function DashboardHome() {
           {MARKETPLACE_CARDS.map((card) => (
             <div
               key={card.name}
-              className="rounded-xl border border-gray-200 bg-white p-4 hover:border-gray-300 hover:shadow-sm transition-all"
+              onClick={() => card.sessionLink && router.push(card.sessionLink)}
+              className={`rounded-xl border border-gray-200 bg-white p-4 hover:border-gray-300 hover:shadow-sm transition-all ${card.sessionLink ? 'cursor-pointer' : ''}`}
             >
               <div className="flex items-center gap-2.5 mb-3">
                 <div
