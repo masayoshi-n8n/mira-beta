@@ -12,10 +12,5 @@ export default async function ChatSessionPage({ params }: Props) {
 
   if (!session) notFound();
 
-  return (
-    <ChatInterface
-      initialMessages={session.messages}
-      sessionTitle={session.title}
-    />
-  );
+  return <ChatInterface session={session} />;
 }

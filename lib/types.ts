@@ -1,3 +1,17 @@
+export type ProductAreaKey =
+  | 'creator_analytics'
+  | 'post_scheduling'
+  | 'newsletter_monetization'
+  | 'creator_fund_beta'
+  | 'platform_context';
+
+export interface ProductAreaConfig {
+  key: ProductAreaKey;
+  label: string;
+  color: string;
+  position: { x: number; y: number };
+}
+
 export type ThemeGroupKey =
   | 'pmf'
   | 'satisfaction'
@@ -48,6 +62,7 @@ export interface LPMNode {
   confidence: number;
   projectId?: string;
   themeGroup?: ThemeGroupKey;
+  productArea?: ProductAreaKey;
   metadata: Record<string, string | number | boolean>;
 }
 
@@ -61,6 +76,13 @@ export interface LPMEdge {
   timestamp: string;
 }
 
+export interface Artifact {
+  id: string;
+  title: string;
+  description: string;
+  content: string;
+}
+
 export interface ChatMessage {
   id: string;
   role: 'user' | 'mira';
@@ -69,6 +91,7 @@ export interface ChatMessage {
   provenance?: ProvenanceItem[];
   confidence?: ConfidenceLevel;
   decisionTrace?: DecisionTrace;
+  artifacts?: Artifact[];
 }
 
 export interface ProvenanceItem {

@@ -5,7 +5,8 @@ import { Paperclip, Mic, Monitor, ArrowUp, Square, FileText, X, ChevronRight, Ma
 import { getChatSessionById } from '@/lib/data';
 import { useStore } from '@/lib/store';
 import { DecisionTrace } from '@/components/chat/DecisionTrace';
-import type { ChatSession, ChatMessage } from '@/lib/types';
+import { ArtifactPanel } from '@/components/chat/ArtifactPanel';
+import type { ChatSession, ChatMessage, Artifact } from '@/lib/types';
 
 export interface ChatInterfaceProps {
   session?: ChatSession;
@@ -13,33 +14,54 @@ export interface ChatInterfaceProps {
   sessionTitle?: string;
 }
 
-
 function matchSession(query: string): ChatMessage | null {
   const lower = query.toLowerCase();
   let sessionId: string | null = null;
+  let messageId: string | null = null;
 
-  if (lower.includes('q3') || lower.includes('build first') || lower.includes('prioriti') || lower.includes('what should')) {
+  if (lower.includes('activation') || lower.includes('12%') || lower.includes('organic') || lower.includes('gate') || lower.includes('sign-up') || lower.includes('signup')) {
     sessionId = 'cs-001';
+    messageId = 'msg-001-04';
+  } else if (lower.includes('deliverable') || lower.includes('leadership') || lower.includes('make it') || (lower.includes('yes') && lower.length < 40)) {
+    sessionId = 'cs-001';
+    messageId = 'msg-001-10';
+  } else if (lower.includes('experiment') || lower.includes('what should') || lower.includes('what do we do')) {
+    sessionId = 'cs-001';
+    messageId = 'msg-001-06';
+  } else if (lower.includes('q3') || lower.includes('build first') || lower.includes('prioriti')) {
+    sessionId = 'cs-001';
+    messageId = 'msg-001-08';
   } else if ((lower.includes('analytics') && (lower.includes('demand') || lower.includes('know'))) || lower.includes('creator analytics')) {
     sessionId = 'cs-002';
-  } else if (lower.includes('roadmap') || lower.includes('q1') || lower.includes('what changed') || lower.includes('changed in')) {
+  } else if (lower.includes('roadmap') || lower.includes('q1') || lower.includes('what changed')) {
     sessionId = 'cs-003';
   }
 
   if (!sessionId) return null;
   const s = getChatSessionById(sessionId);
-  return s?.messages.find((m) => m.role === 'mira') ?? null;
+  if (!s) return null;
+  if (messageId) return s.messages.find((m) => m.id === messageId) ?? null;
+  return s.messages.find((m) => m.role === 'mira') ?? null;
 }
 
-function ArtifactCard({ title, description }: { title: string; description: string }) {
+function ArtifactCard({
+  artifact,
+  onOpen,
+}: {
+  artifact: Artifact;
+  onOpen: (a: Artifact) => void;
+}) {
   return (
-    <div className="flex items-start gap-3 bg-gray-50 border border-gray-200 rounded-xl p-4 my-3">
+    <button
+      onClick={() => onOpen(artifact)}
+      className="w-full flex items-start gap-3 bg-gray-50 border border-gray-200 rounded-xl p-4 my-2 text-left hover:bg-gray-100 hover:border-gray-300 transition-colors group"
+    >
       <FileText className="h-5 w-5 text-[#4F3DD5] shrink-0 mt-0.5" />
-      <div>
-        <p className="text-sm font-semibold text-gray-900">{title}</p>
-        <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+      <div className="min-w-0">
+        <p className="text-sm font-semibold text-gray-900 group-hover:text-[#4F3DD5] transition-colors">{artifact.title}</p>
+        <p className="text-xs text-gray-500 mt-0.5 leading-snug">{artifact.description}</p>
       </div>
-    </div>
+    </button>
   );
 }
 
@@ -53,8 +75,13 @@ function LPMBanner() {
   );
 }
 
-
-function MsgBubble({ message }: { message: ChatMessage }) {
+function MsgBubble({
+  message,
+  onOpenArtifact,
+}: {
+  message: ChatMessage;
+  onOpenArtifact: (a: Artifact) => void;
+}) {
   const isUser = message.role === 'user';
 
   if (isUser) {
@@ -67,7 +94,6 @@ function MsgBubble({ message }: { message: ChatMessage }) {
                 <span key={i} className="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 text-xs text-gray-600">
                   <FileText className="h-2.5 w-2.5" />
                   {p.source}
-                  <X className="h-2.5 w-2.5 text-gray-400" />
                 </span>
               ))}
             </div>
@@ -87,6 +113,16 @@ function MsgBubble({ message }: { message: ChatMessage }) {
           if (line.startsWith('**') && line.endsWith('**')) {
             return <p key={i} className="font-bold mt-3 mb-1">{line.slice(2, -2)}</p>;
           }
+          const boldLabelMatch = line.match(/^\*\*(.+?)\*\*:?\s*(.*)/);
+          if (boldLabelMatch) {
+            const [, label, rest] = boldLabelMatch;
+            return (
+              <p key={i} className="mt-2 mb-0.5">
+                <span className="font-semibold">{label}{rest ? ':' : ''}</span>
+                {rest ? ` ${rest}` : ''}
+              </p>
+            );
+          }
           if (line.startsWith('- ') || line.match(/^\d+\./)) {
             return (
               <div key={i} className="flex gap-2 ml-2 mb-1">
@@ -100,16 +136,18 @@ function MsgBubble({ message }: { message: ChatMessage }) {
         })}
       </div>
 
+      {message.artifacts && message.artifacts.length > 0 && (
+        <div className="mt-3">
+          {message.artifacts.map((artifact) => (
+            <ArtifactCard key={artifact.id} artifact={artifact} onOpen={onOpenArtifact} />
+          ))}
+        </div>
+      )}
+
       {message.decisionTrace && <DecisionTrace trace={message.decisionTrace} />}
 
-      {message.role === 'mira' && message.content.includes('artifact') && (
-        <>
-          <ArtifactCard
-            title="Q3 Prioritization Brief"
-            description="A recommendation brief for Q3 with supporting signals, competitive context, and exec framing."
-          />
-          <LPMBanner />
-        </>
+      {message.role === 'mira' && !message.artifacts && message.content.includes('artifact') && (
+        <LPMBanner />
       )}
 
       {message.provenance && message.provenance.length > 0 && (
@@ -148,7 +186,7 @@ function ProcessingState({ files }: { files: string[] }) {
   );
 }
 
-const FALLBACK_RESPONSE = "I've searched your product context and found relevant signals. Based on the 28 nodes in your knowledge graph, this touches on decisions from your Q2 planning, creator interview feedback, and competitive intelligence.\n\nWant me to dig deeper into any specific aspect? You can also try asking about Q3 prioritization, creator analytics demand, or what changed in your Q1 roadmap.";
+const FALLBACK_RESPONSE = "I've searched your product context and found relevant signals. Based on the nodes in your knowledge graph, this touches on your activation funnel, recent sprint changes, and customer interview data.\n\nWant me to dig deeper into any specific aspect? You can also try asking about the activation drop, what we should do next, or what changed in the roadmap.";
 
 export function ChatInterface({ session, initialMessages, sessionTitle }: ChatInterfaceProps) {
   const startMessages = session?.messages ?? initialMessages ?? [];
@@ -160,6 +198,7 @@ export function ChatInterface({ session, initialMessages, sessionTitle }: ChatIn
   const [isGenerating, setIsGenerating] = useState(false);
   const [showProcessing, setShowProcessing] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState<string[]>([]);
+  const [openArtifact, setOpenArtifact] = useState<Artifact | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -229,7 +268,10 @@ export function ChatInterface({ session, initialMessages, sessionTitle }: ChatIn
     e.target.value = '';
   }
 
-  const materialsCount = messages.filter((m) => m.role === 'mira' && m.decisionTrace).length + 1;
+  const uploadedFileCount = messages.reduce((acc, m) => {
+    return acc + (m.provenance?.filter((p) => p.layer === 'vector-db' && p.excerpt === '').length ?? 0);
+  }, 0);
+  const materialsCount = Math.max(uploadedFileCount, attachedFiles.length);
 
   return (
     <div className="flex h-full">
@@ -240,19 +282,21 @@ export function ChatInterface({ session, initialMessages, sessionTitle }: ChatIn
             <ChevronRight className="h-3 w-3" />
             <span className="font-medium text-gray-900">{title}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-sm text-gray-500">
-            <FileText className="h-4 w-4" />
-            <span>{materialsCount} Materials</span>
-          </div>
+          {materialsCount > 0 && (
+            <div className="flex items-center gap-1.5 text-sm text-gray-500">
+              <FileText className="h-4 w-4" />
+              <span>{materialsCount} Material{materialsCount !== 1 ? 's' : ''}</span>
+            </div>
+          )}
         </div>
 
         <div className="flex-1 overflow-y-auto px-10 py-8 max-w-3xl mx-auto w-full">
           {messages.map((msg) => (
-            <MsgBubble key={msg.id} message={msg} />
+            <MsgBubble key={msg.id} message={msg} onOpenArtifact={setOpenArtifact} />
           ))}
 
           {showProcessing && (
-            <ProcessingState files={attachedFiles.length > 0 ? attachedFiles : ['NPS_Report_Q1.pdf', 'Creator_Interviews.docx']} />
+            <ProcessingState files={attachedFiles.length > 0 ? attachedFiles : ['Amplitude_Funnel_WoW.csv', 'Gong_Transcripts_May.pdf', 'Sprint_Retro_Apr28.md']} />
           )}
 
           {isGenerating && !showProcessing && (
@@ -317,6 +361,10 @@ export function ChatInterface({ session, initialMessages, sessionTitle }: ChatIn
           <input ref={fileInputRef} type="file" multiple className="hidden" onChange={handleFileChange} />
         </div>
       </div>
+
+      {openArtifact && (
+        <ArtifactPanel artifact={openArtifact} onClose={() => setOpenArtifact(null)} />
+      )}
     </div>
   );
 }

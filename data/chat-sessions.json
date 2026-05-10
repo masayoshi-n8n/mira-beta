@@ -1,140 +1,113 @@
 [
   {
     "id": "cs-001",
-    "title": "What should we build first in Q3?",
-    "createdAt": "2026-04-10T10:15:00Z",
-    "updatedAt": "2026-04-10T10:18:00Z",
+    "title": "Activation dropped 12% — root cause & plan",
+    "createdAt": "2026-05-10T09:15:00Z",
+    "updatedAt": "2026-05-10T09:35:00Z",
     "messages": [
       {
         "id": "msg-001-01",
         "role": "user",
-        "content": "What should we build first in Q3 and why?",
-        "timestamp": "2026-04-10T10:15:00Z"
+        "content": "Activation dropped 12% WoW. I've uploaded our Amplitude funnel data, three Gong transcripts from the last two weeks, and our last two sprint retros. I need to understand what caused this and what we should do about it. I have a leadership sync in 15 minutes.",
+        "timestamp": "2026-05-10T09:15:00Z",
+        "provenance": [
+          { "layer": "vector-db", "source": "Amplitude_Funnel_WoW.csv", "excerpt": "" },
+          { "layer": "vector-db", "source": "Gong_Transcripts_May.pdf", "excerpt": "" },
+          { "layer": "vector-db", "source": "Sprint_Retro_Apr28.md", "excerpt": "" }
+        ]
       },
       {
         "id": "msg-001-02",
         "role": "mira",
-        "content": "Based on everything I've ingested over the past 60 days, my recommendation is **Creator Analytics Dashboard first** in Q3, with Newsletter Monetization sequenced to Q4.\n\nHere's the causal chain that leads me there:\n\n**The demand signal is unusually strong.** 68 NPS requests for analytics in Q1 alone — up 40% in 6 weeks. That's not noise, that's a pattern. When I cross-reference this against your creator interview notes from February, 14 of 14 interviewees surfaced analytics visibility as a pain point. The support ticket cluster (41 tickets in March) confirms the same gap from a different angle.\n\n**The churn risk is acute.** Your team sync on April 8 confirmed it: Power Creators with 50K+ followers are churning at 3x the rate of Q4, and 34% of exit surveys cite 'lack of analytics' as the primary reason. Substack launched creator dashboards in April. That's not a coincidence — they're actively recruiting your best creators.\n\n**The exec mandate for Monetization is real, but sequenceable.** The CEO's Q3 revenue signal requirement (March 3 all-hands) and the VP Revenue mandate are legitimate. But Newsletter Monetization is a 10-week build. Creator Analytics is 6 weeks. You can ship Analytics by mid-Q3 and begin Monetization immediately after — still hitting Q4 with a revenue signal.\n\n**The risk of flipping this is higher.** If you build Monetization first, you spend 10 weeks while Substack continues to poach your analytics-starved Power Creators. By the time you ship Analytics in Q4, the segment you're trying to monetize has already left.\n\nI've mapped the full decision trace below — every signal, decision, and relationship that led to this recommendation.",
-        "timestamp": "2026-04-10T10:15:45Z",
+        "content": "Got it — I'm processing all three documents now. While that runs, quick clarifying question: is the 12% drop in overall activation or in a specific segment? And do you know yet if it's a tracking issue, seasonality, or a real behavioral change?",
+        "timestamp": "2026-05-10T09:15:20Z"
+      },
+      {
+        "id": "msg-001-03",
+        "role": "user",
+        "content": "It's overall activation. Not tracking — we already sanity checked. Looks real. Biggest drop seems to be in organic acquisition, but I haven't isolated it yet.",
+        "timestamp": "2026-05-10T09:16:10Z"
+      },
+      {
+        "id": "msg-001-04",
+        "role": "mira",
+        "content": "Finished processing. Here's what I found across your three sources:\n\n**Amplitude:** The 12% overall drop is driven almost entirely by a 31% drop in organic acquisition users. ICP users (active job seekers, searching 3+ times per week) show only a 4% drop. Non-ICP users (passive, low-intent) are down 38%.\n\n**Gong transcripts:** 2 of 3 interviews surface friction at the same funnel step — users landing from Google search hitting a mandatory sign-up wall before seeing any job results.\n\nVerbatim from User 2: 'I just wanted to see if there were any jobs before bothering to sign up. When it asked me to log in first I just left.'\n\n**Sprint retro:** Your team shipped a change 11 days ago that tightened the sign-up gate on organic landing pages to reduce unqualified applications. The change was intended for low-intent users but applies to all organic traffic regardless of search intent signal.\n\n**Hypothesis:** The activation drop is primarily caused by the sign-up gate change applied to organic traffic 11 days ago. It is disproportionately impacting low-intent users from generic search queries, but the friction is broad enough to reduce overall activation. This is not a tracking or seasonality issue.",
+        "timestamp": "2026-05-10T09:17:00Z",
         "confidence": "high",
         "provenance": [
           {
-            "layer": "knowledge-graph",
-            "source": "NPS Survey → Creator Analytics Feature (influenced, 0.93)",
-            "excerpt": "68 NPS requests, 40% volume growth over 6 weeks"
+            "layer": "vector-db",
+            "source": "Amplitude_Funnel_WoW.csv",
+            "excerpt": "Organic acquisition -31% WoW. ICP segment -4%. Non-ICP -38%. Drop onset: 11 days ago."
           },
           {
             "layer": "vector-db",
-            "source": "Creator Interview Notes Q1 2026",
-            "excerpt": "14/14 interviews surfaced analytics visibility as primary pain. Quote: 'I'm flying blind. I post and hope.'"
+            "source": "Gong_Transcripts_May.pdf",
+            "excerpt": "User 2: 'I just wanted to see if there were any jobs before signing up. When it asked me to log in first I just left.'"
           },
           {
-            "layer": "knowledge-graph",
-            "source": "Substack competitor node → Q3 Decision (influenced, 0.91)",
-            "excerpt": "Substack Creator Analytics Dashboard launched April 2026 — direct competitive pressure"
-          },
-          {
-            "layer": "llm-wiki",
-            "source": "Q3 2026 Strategic Bets (wiki)",
-            "excerpt": "Mira's recommendation: sequence Analytics first (6-week build), then Monetization (10-week build) in Q4"
+            "layer": "vector-db",
+            "source": "Sprint_Retro_Apr28.md",
+            "excerpt": "Shipped: sign-up gate tightened on organic landing pages to reduce unqualified applications. No intent signal scoping."
           }
-        ],
-        "decisionTrace": {
-          "nodes": [
-            {
-              "id": "dt-001",
-              "label": "NPS Demand Spike",
-              "type": "feedback",
-              "timestamp": "2026-03-15T10:00:00Z",
-              "source": "NPS Survey",
-              "confidence": 0.95,
-              "detail": "68 NPS requests for Creator Analytics. Volume up 40% in 6 weeks. Strongest single signal in the dataset."
-            },
-            {
-              "id": "dt-002",
-              "label": "Creator Churn Signal",
-              "type": "metric",
-              "timestamp": "2026-04-08T15:00:00Z",
-              "source": "Team Sync Notes + Exit Surveys",
-              "confidence": 0.91,
-              "detail": "Power Creators churning at 3x rate. 34% cite analytics gap as primary exit reason. Confirmed April 8."
-            },
-            {
-              "id": "dt-003",
-              "label": "Substack Analytics Launch",
-              "type": "competitor",
-              "timestamp": "2026-04-05T09:00:00Z",
-              "source": "Competitive Analysis",
-              "confidence": 0.98,
-              "detail": "Substack launched creator dashboards in April 2026. Directly competes with LinkedIn's gap. $180M ARR, 35M readers."
-            },
-            {
-              "id": "dt-004",
-              "label": "Exec Revenue Mandate",
-              "type": "note",
-              "timestamp": "2026-03-03T18:00:00Z",
-              "source": "CEO All-Hands",
-              "confidence": 0.97,
-              "detail": "CEO: 'Creator Tools needs to show a revenue signal in Q3.' VP Revenue moved Newsletter Monetization from Q4 to Q3."
-            },
-            {
-              "id": "dt-005",
-              "label": "Q3 Priority Decision",
-              "type": "decision",
-              "timestamp": "2026-04-10T10:00:00Z",
-              "source": "Mira Analysis",
-              "confidence": 0.85,
-              "detail": "Analytics Dashboard first (6 weeks), Monetization second (Q4). Reduces churn risk while preserving revenue timeline."
-            },
-            {
-              "id": "dt-006",
-              "label": "Creator Analytics Dashboard",
-              "type": "feature",
-              "timestamp": "2026-02-10T09:00:00Z",
-              "source": "Jira",
-              "confidence": 0.97,
-              "detail": "6-week build. Impressions, engagement rate, follower growth charts, content performance breakdown. Closes Substack parity gap."
-            }
-          ],
-          "edges": [
-            {
-              "id": "dte-001",
-              "source": "dt-001",
-              "target": "dt-005",
-              "label": "influenced"
-            },
-            {
-              "id": "dte-002",
-              "source": "dt-002",
-              "target": "dt-005",
-              "label": "influenced"
-            },
-            {
-              "id": "dte-003",
-              "source": "dt-003",
-              "target": "dt-005",
-              "label": "influenced"
-            },
-            {
-              "id": "dte-004",
-              "source": "dt-004",
-              "target": "dt-005",
-              "label": "influenced"
-            },
-            {
-              "id": "dte-005",
-              "source": "dt-005",
-              "target": "dt-006",
-              "label": "caused"
-            },
-            {
-              "id": "dte-006",
-              "source": "dt-003",
-              "target": "dt-001",
-              "label": "relates_to"
-            }
-          ]
-        }
+        ]
+      },
+      {
+        "id": "msg-001-05",
+        "role": "user",
+        "content": "That tracks. The gate change was meant to reduce junk applications but we didn't scope it narrowly enough. What should we do?",
+        "timestamp": "2026-05-10T09:18:30Z"
+      },
+      {
+        "id": "msg-001-06",
+        "role": "mira",
+        "content": "Based on the evidence, I'd suggest two experiments rather than a rollback:\n\n**Experiment 1 (High confidence):** Scope the sign-up gate by search intent signal. Users arriving from high-intent queries (job title + location, specific company name) see job results before the gate. Users from low-intent queries (generic 'jobs near me') hit the gate earlier. This preserves the quality goal while recovering organic activation.\n\n**Experiment 2 (Medium confidence):** Show a preview of 3 relevant job cards before the sign-up prompt for all organic traffic. Verbatim from User 2 and User 3 both suggest that seeing relevant results is the conversion trigger — not the sign-up itself.\n\nI'll hold off on Experiment 2 as a confirmed recommendation until I see whether the preview approach has been tested before. Do you have any prior experiment data on gated vs. ungated previews I should factor in?",
+        "timestamp": "2026-05-10T09:19:15Z",
+        "confidence": "high"
+      },
+      {
+        "id": "msg-001-07",
+        "role": "user",
+        "content": "We ran a preview experiment about 6 months ago — it increased sign-ups but conversion to application was lower. I'll share that doc.",
+        "timestamp": "2026-05-10T09:20:45Z"
+      },
+      {
+        "id": "msg-001-08",
+        "role": "mira",
+        "content": "That's the key constraint. With that prior experiment on record, Experiment 1 is the higher-confidence bet — it addresses the root cause directly without the conversion risk the preview approach introduced.\n\nI've noted the prior experiment as a constraint node in your workspace so it surfaces automatically in any future experiment design conversation.\n\nShall I generate the three deliverables now?",
+        "timestamp": "2026-05-10T09:21:30Z"
+      },
+      {
+        "id": "msg-001-09",
+        "role": "user",
+        "content": "Yes. Make it leadership-ready.",
+        "timestamp": "2026-05-10T09:22:00Z"
+      },
+      {
+        "id": "msg-001-10",
+        "role": "mira",
+        "content": "Here are your three deliverables, built from the data you provided. Sections marked as provisional can be sharpened by adding persona detail or connecting your analytics tool.\n\nOpen any artifact to review and edit — or tell me what you want to adjust and I'll update it directly.",
+        "timestamp": "2026-05-10T09:22:45Z",
+        "artifacts": [
+          {
+            "id": "art-001-01",
+            "title": "Metric Diagnostic Summary",
+            "description": "What dropped, by how much, in which segments, and why it's real.",
+            "content": "**Metric:** New job seeker activation rate (first 7 days)\n**Drop:** -12% WoW (overall); -31% organic acquisition segment\n\n**ICP impact:** -4% (Active Job Seekers, high-intent, searching 3+ times/week)\n**Non-ICP impact:** -38% (Passive Job Seekers, low-intent, generic query organic)\n\n**Tracking / seasonality:** Ruled out — sanity check confirmed with data team prior to session.\n\n**Key pattern:** Drop onset correlates precisely with sprint deployment 11 days ago. No other significant product or infrastructure changes in the same window.\n\n**Confidence:** High — 3-source corroboration: Amplitude funnel data + Gong interview transcripts + sprint retrospective notes."
+          },
+          {
+            "id": "art-001-02",
+            "title": "Root Cause & Opportunity Assessment",
+            "description": "The causal chain from signal to root cause, with business impact estimate.",
+            "content": "**Root cause (high confidence):** Sign-up gate change applied to all organic traffic on day -11. Gate was scoped to reduce unqualified applications from low-intent users, but the implementation applies globally regardless of search intent signal.\n\n**Supporting evidence:**\n- Amplitude: Drop onset matches deployment date exactly. Organic segment -31%, ICP segment only -4%.\n- Gong User 2: 'I just wanted to see if there were jobs before signing up. When it asked me to log in first I just left.'\n- Gong User 3: Similar friction at same funnel step — gate encountered before any job results are visible.\n- Sprint retro: Gate change confirmed as primary shipped item in last sprint.\n\n**Business impact:** If organic acquisition represents ~40% of new user volume, a sustained 31% drop in that segment projects to 12-15% reduction in overall new user growth monthly if unaddressed.\n\n**Unknowns:** Long-term retention impact on users who do convert through the gate. Availability of real-time intent signal data for gate scoping — needs engineering confirmation before sprint commit."
+          },
+          {
+            "id": "art-001-03",
+            "title": "Action Plan with Focused Bets",
+            "description": "Recommended next moves based on the root cause assessment, with effort estimates and success criteria.",
+            "content": "**Recommended Action:** Experiment 1 — Intent-scoped sign-up gate\n\n**Hypothesis:** Scoping the sign-up gate to activate only for low-intent organic traffic (generic queries) while showing results-first for high-intent queries will recover organic activation without increasing unqualified applications.\n\n**Variant:** Gate activates only for generic queries (e.g. 'jobs near me'). High-intent queries (job title + location, company name) see results before the gate.\n\n**Control — Current state:** Sign-up gate activates for all organic traffic regardless of search intent.\n\n**Target metric:** New job seeker activation rate, organic acquisition segment\n**Success threshold:** Recover to within 5% of pre-change baseline within 2 weeks\n**Guardrail metric:** Application quality score — must not decrease\n\n**Effort:** Engineering M — intent signal already exists in the system; gate logic change is additive, not a rebuild\n**Design:** S — gate UX unchanged, only trigger condition changes\n\n**Constraint noted:** Prior preview experiment (6 months ago) showed higher sign-up rate but lower conversion to application. Preview approach excluded from this recommendation on that basis.\n\n○ Provisional — strengthens with confirmed intent signal availability from engineering. Recommend 30-min sync with Engineering Lead before sprint commitment.\n\n○ Provisional — success threshold based on organic representing ~40% of new users. Validate against current Amplitude baseline before using in leadership presentation.\n\n**Next step:** 30-minute sync with Engineering Lead to confirm intent signal availability and gate architecture before committing to sprint."
+          }
+        ]
       }
     ]
   },
