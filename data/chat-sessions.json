@@ -63,31 +63,7 @@
         "role": "mira",
         "content": "Based on the evidence, I'd suggest two experiments rather than a rollback:\n\n**Experiment 1 (High confidence):** Scope the sign-up gate by search intent signal. Users arriving from high-intent queries (job title + location, specific company name) see job results before the gate. Users from low-intent queries (generic 'jobs near me') hit the gate earlier. This preserves the quality goal while recovering organic activation.\n\n**Experiment 2 (Medium confidence):** Show a preview of 3 relevant job cards before the sign-up prompt for all organic traffic. Verbatim from User 2 and User 3 both suggest that seeing relevant results is the conversion trigger — not the sign-up itself.\n\nI'll hold off on Experiment 2 as a confirmed recommendation until I see whether the preview approach has been tested before. Do you have any prior experiment data on gated vs. ungated previews I should factor in?",
         "timestamp": "2026-05-10T09:19:15Z",
-        "confidence": "high"
-      },
-      {
-        "id": "msg-001-07",
-        "role": "user",
-        "content": "We ran a preview experiment about 6 months ago — it increased sign-ups but conversion to application was lower. I'll share that doc.",
-        "timestamp": "2026-05-10T09:20:45Z"
-      },
-      {
-        "id": "msg-001-08",
-        "role": "mira",
-        "content": "That's the key constraint. With that prior experiment on record, Experiment 1 is the higher-confidence bet — it addresses the root cause directly without the conversion risk the preview approach introduced.\n\nI've noted the prior experiment as a constraint node in your workspace so it surfaces automatically in any future experiment design conversation.\n\nShall I generate the three deliverables now?",
-        "timestamp": "2026-05-10T09:21:30Z"
-      },
-      {
-        "id": "msg-001-09",
-        "role": "user",
-        "content": "Yes. Make it leadership-ready.",
-        "timestamp": "2026-05-10T09:22:00Z"
-      },
-      {
-        "id": "msg-001-10",
-        "role": "mira",
-        "content": "Here are your three deliverables, built from the data you provided. Sections marked as provisional can be sharpened by adding persona detail or connecting your analytics tool.\n\nOpen any artifact to review and edit — or tell me what you want to adjust and I'll update it directly.",
-        "timestamp": "2026-05-10T09:22:45Z",
+        "confidence": "high",
         "decisionTrace": {
           "nodes": [
             {
@@ -185,7 +161,31 @@
             { "id": "dte-10", "source": "dt-metric-def", "target": "dt-art2", "label": "influenced" },
             { "id": "dte-11", "source": "dt-metric-def", "target": "dt-art3", "label": "influenced" }
           ]
-        },
+        }
+      },
+      {
+        "id": "msg-001-07",
+        "role": "user",
+        "content": "We ran a preview experiment about 6 months ago — it increased sign-ups but conversion to application was lower. I'll share that doc.",
+        "timestamp": "2026-05-10T09:20:45Z"
+      },
+      {
+        "id": "msg-001-08",
+        "role": "mira",
+        "content": "That's the key constraint. With that prior experiment on record, Experiment 1 is the higher-confidence bet — it addresses the root cause directly without the conversion risk the preview approach introduced.\n\nI've noted the prior experiment as a constraint node in your workspace so it surfaces automatically in any future experiment design conversation.\n\nShall I generate the three deliverables now?",
+        "timestamp": "2026-05-10T09:21:30Z"
+      },
+      {
+        "id": "msg-001-09",
+        "role": "user",
+        "content": "Yes. Make it leadership-ready.",
+        "timestamp": "2026-05-10T09:22:00Z"
+      },
+      {
+        "id": "msg-001-10",
+        "role": "mira",
+        "content": "Here are your three deliverables, built from the data you provided. Sections marked as provisional can be sharpened by adding persona detail or connecting your analytics tool.\n\nOpen any artifact to review and edit — or tell me what you want to adjust and I'll update it directly.",
+        "timestamp": "2026-05-10T09:22:45Z",
         "artifacts": [
           {
             "id": "art-001-01",
